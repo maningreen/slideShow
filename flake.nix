@@ -1,0 +1,29 @@
+{
+  description = "An environment for the shwompEngine";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  };
+
+  outputs = {
+    nixpkgs,
+    ...
+  }: let
+    supportedSystems = [
+      "x86_64-linux"
+    ];
+    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+  in {
+    devShells = forAllSystems (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      default = pkgs.callPackage ./shell.nix {inherit pkgs;};
+    });
+
+    packages = forAllSystems (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      default = pkgs.callPackage ./default.nix {inherit pkgs;};
+    });
+  };
+}
