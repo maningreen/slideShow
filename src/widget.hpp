@@ -2,6 +2,7 @@
 #define widget_h
 
 #include "engine/entity.hpp"
+#include "include.h"
 #include <climits>
 #include <vector>
 
@@ -26,20 +27,15 @@ struct Widget : Entity2D {
 //  hBox(Widget());
 // stacks items on top of another.
 struct Box : Widget {
-  Box(int dir, std::vector<Widget*>);
+  Box(Direction dir, std::vector<Widget*>);
   ~Box();
 
   void step(float delta) override;
   void render() override;
-  
-  enum Direction {
-    Vertical,
-    Horizontal
-  };
 
   private:
     // the direction in which to order things
-    int dir;
+    Direction dir;
 };
 
 struct Rect : Widget {
@@ -64,6 +60,12 @@ struct CircleSection : Circle {
   CircleSection(Vector2 p, float r, float centerTheta, float offsetTheta, Color c);
   float centerAngle;
   float offset;
+  void render() override;
+};
+
+struct CircleSectionLines : CircleSection {
+  CircleSectionLines(Vector2 p, float r, float centerTheta, float offsetTheta, float thickness, Color c);
+  float thickness;
   void render() override;
 };
 

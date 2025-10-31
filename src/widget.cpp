@@ -1,9 +1,9 @@
 #include "widget.hpp"
 #include "engine/entity.hpp"
-#include <algorithm>
+#include "include.h"
+#include <cmath>
 #include <cstdio>
 #include <cstring>
-#include <iostream>
 #include <vector>
 
 Widget::Widget(Vector2 p, Vector2 dimensions)
@@ -15,15 +15,14 @@ Widget::Widget(): Widget(Vector2Zero(), Vector2Zero()) {}
 Widget::~Widget() {}
 
 void Widget::process(float delta) {
-  for(int i = 0; i < entities.size(); i++) {
-    // entities[i].globalPos = entities[i].position + position;
-  }
+  for(int i = 0; i < entities.size(); i++)
+    entities[i]->globalPos = entities[i]->position + position;
   step(delta);
 }
 
 void Widget::step(float delta) {}
 
-Box::Box(int d, std::vector<Widget*> widgets) {
+Box::Box(Direction d, std::vector<Widget*> widgets) {
   dir = d;
   entities = widgets;
   position = Vector2Zero();
@@ -42,16 +41,20 @@ void Box::step(float delta) {
   entities[0]->position = position;
   dimensions += entities[0]->dimensions;
   for(int i = 1; i < entities.size(); i++) {
+    entities[i]->process(delta);
     entities[i]->position = position;
     if(dir == Vertical) {
       entities[i]->position.y = entities[i - 1]->dimensions.y + entities[i - 1]->position.y;
+
       dimensions.y += entities[i]->dimensions.y;
       if(dimensions.x < entities[i]->dimensions.x)
         dimensions.x = entities[i]->dimensions.x;
     }
     else if (dir == Horizontal){
+
       dimensions.x += entities[i]->dimensions.x;
       entities[i]->position.x = entities[i - 1]->dimensions.x + entities[i - 1]->position.x;
+
       if(dimensions.y < entities[i]->dimensions.y)
         dimensions.y = entities[i]->dimensions.y;
     }
@@ -64,11 +67,11 @@ void Box::render() {
 }
 
 Box* hBox(std::vector<Widget*> x) {
-  return (new Box(Box::Horizontal, x));
+  return (new Box(Horizontal, x));
 }
 
 Box* vBox(std::vector<Widget*> x) {
-  return (new Box(Box::Vertical, x));
+  return (new Box(Vertical, x));
 }
 
 Rect::Rect(float x, float y, float w, float h, Color c) {
@@ -107,8 +110,25 @@ void Circle::render() {
 CircleSection::CircleSection(Vector2 p, float r, float a, float b, Color c) : Circle(p, r, c) {
   centerAngle = a;
   offset = b;
+  dimensions = {
+    .x = radius * 2,
+    .y = radius * 2
+  };
 }
 
 void CircleSection::render() {
   DrawCircleSector(position + (Vector2){radius, radius}, radius, RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, colour);
+}
+
+CircleSectionLines::CircleSectionLines(Vector2 p, float r, float centerTheta, float offsetTheta, float t, Color c): CircleSection(p, r, centerTheta, offsetTheta, c) {
+  thickness = t;
+  dimensions = {
+    .x = radius * 2,
+    .y = radius * 2
+  };
+}
+void CircleSectionLines::render() {
+  Vector2 center = position + (Vector2){radius, radius};
+  DrawCircleSector(center, radius, RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, colour);
+  DrawCircleSector(center, radius - thickness, RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, BACKGROUND);
 }
