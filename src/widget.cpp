@@ -1,5 +1,6 @@
 #include "widget.hpp"
 #include "engine/entity.hpp"
+#include <algorithm>
 #include <cstdio>
 #include <cstring>
 #include <iostream>
@@ -36,23 +37,38 @@ void Box::step(float delta) {
     killDefered();
     return;
   }
+  dimensions = Vector2Zero();
   entities[0]->process(delta);
   entities[0]->position = position;
+  dimensions += entities[0]->dimensions;
   for(int i = 1; i < entities.size(); i++) {
     entities[i]->position = position;
-    if(dir == Vertical)
-      entities[i]->position.y = entities[i - 1]->position.y + entities[i - 1]->dimensions.y;
-    else
-      entities[i]->position.x = entities[i - 1]->position.x + entities[i - 1]->dimensions.x;
+    if(dir == Vertical) {
+      entities[i]->position.y = entities[i - 1]->dimensions.y + entities[i - 1]->position.y;
+      dimensions.y += entities[i]->dimensions.y;
+      if(dimensions.x < entities[i]->dimensions.x)
+        dimensions.x = entities[i]->dimensions.x;
+    }
+    else if (dir == Horizontal){
+      dimensions.x += entities[i]->dimensions.x;
+      entities[i]->position.x = entities[i - 1]->dimensions.x + entities[i - 1]->position.x;
+      if(dimensions.y < entities[i]->dimensions.y)
+        dimensions.y = entities[i]->dimensions.y;
+    }
   }
 }
 
 void Box::render() {
-  entities[0]->render();
+  for(int i = 0; i < entities.size(); i++)
+    entities[i]->render();
 }
 
 Box* hBox(std::vector<Widget*> x) {
   return (new Box(Box::Horizontal, x));
+}
+
+Box* vBox(std::vector<Widget*> x) {
+  return (new Box(Box::Vertical, x));
 }
 
 Rect::Rect(float x, float y, float w, float h, Color c) {
@@ -74,5 +90,25 @@ Rect::Rect(Rectangle x, Color c) {
 }
 
 void Rect::render() {
-  DrawRectangle(position.x, position.y, dimensions.x, dimensions.y, WHITE);
+  DrawRectangle(position.x, position.y, dimensions.x, dimensions.y, colour);
+}
+
+Circle::Circle(Vector2 p, float r, Color c) {
+  position = p;
+  radius = r;
+  colour = c;
+  dimensions = {radius * 2, radius * 2};
+}
+
+void Circle::render() {
+  DrawCircleV(position + (Vector2){radius, radius}, radius, colour);
+}
+
+CircleSection::CircleSection(Vector2 p, float r, float a, float b, Color c) : Circle(p, r, c) {
+  centerAngle = a;
+  offset = b;
+}
+
+void CircleSection::render() {
+  DrawCircleSector(position + (Vector2){radius, radius}, radius, RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, colour);
 }

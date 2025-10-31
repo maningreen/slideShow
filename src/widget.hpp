@@ -52,7 +52,22 @@ struct Rect : Widget {
   Rect(float, float, float, float, Color);
 };
 
-Box* hBox(std::vector<Widget> widgets);
-// static vBox vBox(Widget widgets[]);
+struct Circle : Widget {
+  float radius;
+  Color colour;
+  Circle(Vector2 p, float r, Color c);
+  void render() override;
+};
+
+// this class follows *radians*
+struct CircleSection : Circle {
+  CircleSection(Vector2 p, float r, float centerTheta, float offsetTheta, Color c);
+  float centerAngle;
+  float offset;
+  void render() override;
+};
+
+Box* hBox(std::vector<Widget*> widgets);
+Box* vBox(std::vector<Widget*> widgets);
 
 #endif
