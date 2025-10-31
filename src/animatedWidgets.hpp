@@ -31,6 +31,11 @@ struct AnimatedRect : Rect {
   AnimatedRect(Rect x, AnimatedWidget::easeType, Direction);
 };
 
+struct AnimatedSpacer : AnimatedRect {
+  AnimatedSpacer(Spacer, AnimatedWidget::easeType, Direction);
+  AnimatedSpacer(Rect, AnimatedWidget::easeType, Direction);
+};
+
 struct AnimatedCircle : Circle {
   void step(float delta) override;
   void render() override;
@@ -59,6 +64,16 @@ struct AnimatedCircleSectionLines : CircleSectionLines {
   AnimatedWidget animation;
 
   AnimatedCircleSectionLines(CircleSectionLines x, AnimatedWidget::easeType);
+};
+
+struct AnimatedText : Text {
+  void step(float delta) override;
+  void render() override;
+
+  float progress;
+  AnimatedWidget animation;
+
+  AnimatedText(Text x, AnimatedWidget::easeType);
 };
 
 #endif

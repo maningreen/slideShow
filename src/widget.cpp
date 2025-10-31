@@ -15,9 +15,20 @@ Widget::Widget(): Widget(Vector2Zero(), Vector2Zero()) {}
 Widget::~Widget() {}
 
 void Widget::process(float delta) {
+  Vector2 screenDimensions = {
+    (float)GetScreenWidth(),
+    (float)GetScreenHeight()
+  };
   for(int i = 0; i < entities.size(); i++)
-    entities[i]->globalPos = entities[i]->position + position;
+    entities[i]->globalPos = entities[i]->position + position * screenDimensions;
   step(delta);
+}
+
+void Widget::death() {
+  for(int i = 0; i < entities.size(); i++) {
+    entities[i]->kill();
+    entities.pop_back();
+  }
 }
 
 void Widget::step(float delta) {}
@@ -93,8 +104,12 @@ Rect::Rect(Rectangle x, Color c) {
 }
 
 void Rect::render() {
-  DrawRectangle(position.x, position.y, dimensions.x, dimensions.y, colour);
+  DrawRectangle(globalPos.x, globalPos.y, dimensions.x, dimensions.y, colour);
 }
+
+Spacer::Spacer(float a, float b, float c, float d) : Rect(a, b, c, d, TRANSPERENT) {}
+Spacer::Spacer(Vector2 a, Vector2 b) : Rect(a, b, TRANSPERENT) {}
+Spacer::Spacer(Rectangle a) : Rect(a, TRANSPERENT) {}
 
 Circle::Circle(Vector2 p, float r, Color c) {
   position = p;
@@ -104,7 +119,7 @@ Circle::Circle(Vector2 p, float r, Color c) {
 }
 
 void Circle::render() {
-  DrawCircleV(position + (Vector2){radius, radius}, radius, colour);
+  DrawCircleV(globalPos + (Vector2){radius, radius}, radius, colour);
 }
 
 CircleSection::CircleSection(Vector2 p, float r, float a, float b, Color c) : Circle(p, r, c) {
@@ -117,7 +132,7 @@ CircleSection::CircleSection(Vector2 p, float r, float a, float b, Color c) : Ci
 }
 
 void CircleSection::render() {
-  DrawCircleSector(position + (Vector2){radius, radius}, radius, RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, colour);
+  DrawCircleSector(globalPos + (Vector2){radius, radius}, radius, RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, colour);
 }
 
 CircleSectionLines::CircleSectionLines(Vector2 p, float r, float centerTheta, float offsetTheta, float t, Color c): CircleSection(p, r, centerTheta, offsetTheta, c) {
@@ -128,7 +143,26 @@ CircleSectionLines::CircleSectionLines(Vector2 p, float r, float centerTheta, fl
   };
 }
 void CircleSectionLines::render() {
-  Vector2 center = position + (Vector2){radius, radius};
+  Vector2 center = globalPos + (Vector2){radius, radius};
   DrawCircleSector(center, radius, RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, colour);
   DrawCircleSector(center, radius - thickness, RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, BACKGROUND);
+}
+
+Font Text::fonts[0];
+
+void Text::loadFonts() {
+  fonts[0] = LoadFontEx("resources/body.ttf", 128, 0, 250); 
+}
+
+Text::Text(std::string x, fontType y, Vector2 p, Vector2 dems) {
+  dimensions = dems;
+  position = p;
+  text = x;
+  type = y;
+}
+
+Text::~Text() {}
+
+void Text::render() {
+  DrawTextEx(fonts[type], text.c_str(), globalPos, 100, 2, LIME);
 }

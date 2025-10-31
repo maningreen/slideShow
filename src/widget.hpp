@@ -4,7 +4,12 @@
 #include "engine/entity.hpp"
 #include "include.h"
 #include <climits>
+#include <string>
 #include <vector>
+
+enum fontType {
+  body = 0
+};
 
 struct Widget : Entity2D {
   Vector2 dimensions;
@@ -12,6 +17,7 @@ struct Widget : Entity2D {
 
   virtual void step(float delta);
   void process(float delta) override;
+  void death() override;
 
   std::vector<Widget*> entities;
 
@@ -48,6 +54,12 @@ struct Rect : Widget {
   Rect(float, float, float, float, Color);
 };
 
+struct Spacer : Rect {
+  Spacer(Rectangle);
+  Spacer(Vector2, Vector2);
+  Spacer(float, float, float, float);
+};
+
 struct Circle : Widget {
   float radius;
   Color colour;
@@ -71,5 +83,17 @@ struct CircleSectionLines : CircleSection {
 
 Box* hBox(std::vector<Widget*> widgets);
 Box* vBox(std::vector<Widget*> widgets);
+
+struct Text : Widget {
+  std::string text;
+  fontType type;
+  Text(std::string x, fontType y, Vector2 position, Vector2 dems);
+  ~Text();
+
+  void render() override;
+
+  static Font fonts[];
+  static void loadFonts();
+};
 
 #endif

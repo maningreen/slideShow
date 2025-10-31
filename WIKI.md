@@ -10,15 +10,6 @@ Clone the repository with `git clone https://github.com/maningreen/shwompEngine`
 The file structure is as follows
 ```
 .
-├── build
-│   ├── core.o
-│   ├── entity.o
-│   ├── example.o
-│   ├── init.o
-│   ├── libengine.a
-│   ├── main.o
-│   ├── out
-│   └── root.o
 ├── default.nix
 ├── external
 │   └── raylib-5.5
