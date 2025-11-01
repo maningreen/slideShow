@@ -62,10 +62,9 @@ void Box::step(float delta) {
         dimensions.x = entities[i]->dimensions.x;
     }
     else if (dir == Horizontal){
-
       dimensions.x += entities[i]->dimensions.x;
-      entities[i]->position.x = entities[i - 1]->dimensions.x + entities[i - 1]->position.x;
 
+      entities[i]->position.x = entities[i - 1]->dimensions.x + entities[i - 1]->position.x;
       if(dimensions.y < entities[i]->dimensions.y)
         dimensions.y = entities[i]->dimensions.y;
     }

@@ -1,6 +1,7 @@
 #include "animatedWidgets.hpp"
 #include "engine/entity.hpp"
 #include "include.h"
+#include "slide.hpp"
 #include "widget.hpp"
 
 void init(Entity* root) {
@@ -8,12 +9,16 @@ void init(Entity* root) {
 
   AnimatedCircle* x = new AnimatedCircle(Circle({.1, .1}, 100, HIGHLIGHT1), AnimatedWidget::InOut);
   AnimatedCircle* y = new AnimatedCircle(Circle({.1, .1}, 100, HIGHLIGHT2), AnimatedWidget::InOut);
-  AnimatedText* z = new AnimatedText(Text("coolio", body, {0, 0}, {10, 10}), AnimatedWidget::InOut);
+  AnimatedText* z = new AnimatedText(Text("coolio\nboolio", body, {0, 0}, {10, 10}), AnimatedWidget::InOut);
 
   Box* box = hBox({x, y, z});
-  box->position = {.1, .1};
 
-  root->addChild(box);
+  box->position = {.1, .1};
+  Slide* s = new Slide({box});
+
+  SlideShow* show = new SlideShow({s});
+
+  root->addChild(show);
 }
 
 void preRendering(Entity* root) {
