@@ -31,6 +31,8 @@ namespace toml {
 
   std::optional<Text*> parseText(toml::table);
   std::optional<AnimatedText*> parseAnimatedText(toml::table);
+
+  Box* parseBox(toml::table);
 }
 
 #endif

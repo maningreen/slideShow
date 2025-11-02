@@ -28,10 +28,12 @@ struct AnimatedRect : Rect {
   float progress;
   Direction dir;
   AnimatedWidget animation;
+  float speed;
   AnimatedRect(Rect x, AnimatedWidget::easeType, Direction);
 };
 
 struct AnimatedSpacer : AnimatedRect {
+  float speed;
   AnimatedSpacer(Spacer, AnimatedWidget::easeType, Direction);
   AnimatedSpacer(Rect, AnimatedWidget::easeType, Direction);
 };
@@ -41,6 +43,7 @@ struct AnimatedCircle : Circle {
   void render() override;
 
   float progress;
+  float speed;
   AnimatedWidget animation;
 
   AnimatedCircle(Circle x, AnimatedWidget::easeType);
@@ -51,6 +54,7 @@ struct AnimatedCircleSection : CircleSection {
   void render() override;
 
   float progress;
+  float speed;
   AnimatedWidget animation;
 
   AnimatedCircleSection(CircleSection x, AnimatedWidget::easeType);
@@ -61,6 +65,7 @@ struct AnimatedCircleSectionLines : CircleSectionLines {
   void render() override;
 
   float progress;
+  float speed;
   AnimatedWidget animation;
 
   AnimatedCircleSectionLines(CircleSectionLines x, AnimatedWidget::easeType);
@@ -71,6 +76,7 @@ struct AnimatedText : Text {
   void render() override;
 
   float progress;
+  float speed;
   AnimatedWidget animation;
 
   AnimatedText(Text x, AnimatedWidget::easeType);

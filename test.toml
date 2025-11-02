@@ -24,19 +24,71 @@
   type = "animatedText"
   x = 100
   y = 100
-  size = 200
-  colour = "#FFAAAA"
+  size = 100
+  colour = "#F0000F"
   fontType = "body"
-  contents = "god damn this"
+  contents = """
+  this was so easy tbh
+  not even difficult
+  i aint even capping
+  """
   easeType = "InOut"
 
     [[slides.widgets.children]]
+    x = 100
+    y = 100
+    type = "box"
+    orientation = "vertical"
 
-    type = "circle"
-    x = 0
+      [[slides.widgets.children.widgets]]
+      type = "animatedCircle"
+      x = 0
+      y = 0
+      colour = "#00FF00"
+      speed = 0.01
+      radius = 100
+
+      [[slides.widgets.children.widgets]]
+      type = "animatedRect"
+      x = 0
+      y = 0
+      colour = "#FFFF00"
+      width = 100
+      height = 100
+
+  [[slides.widgets]]
+  type = "animatedCircleSectionLines"
+  centerAngle = 225
+  offsetAngle = 45
+  x = 45
+  y = 45
+  radius = 40
+  thickness = 20
+  colour = "#FFFFFF"
+  speed = 4
+  easeType = "In"
+  
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 40
     y = 0
-    colour = "#00FF00"
-    radius = 100
+    width = 1500
+    height = 20
+    speed = 0.25
+    colour = "#FFFFFF"
+    easeType = "Out"
+    orientation = "Horizontal"
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 0
+    y = 40
+    width = 20
+    height = 500
+    speed = 0.25
+    colour = "#FFFFFF"
+    easeType = "Out"
+    orientation = "Vertical"
 
 [[slides]]
 
@@ -48,3 +100,4 @@
   width = 200
   height = 200
   colour = "#FFFFFF"
+

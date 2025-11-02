@@ -33,6 +33,7 @@ AnimatedRect::AnimatedRect(Rect x, AnimatedWidget::easeType t, Direction z) : Re
   animation = AnimatedWidget(t);
   dir = z;
   progress = 0;
+  speed = 1;
 }
 
 void AnimatedRect::step(float delta) {
@@ -40,7 +41,7 @@ void AnimatedRect::step(float delta) {
     for(int i = 0; i < entities.size(); i++)
       entities[i]->process(delta);
   else
-    progress += delta;
+    progress += delta * speed;
 }
 
 void AnimatedRect::render() {
@@ -53,13 +54,18 @@ void AnimatedRect::render() {
 }
 
 AnimatedSpacer::AnimatedSpacer(Spacer x, AnimatedWidget::easeType t, Direction d) : 
-  AnimatedRect(Rect(x.position, x.dimensions, TRANSPARENT), t, d) {}
+  AnimatedRect(Rect(x.position, x.dimensions, TRANSPARENT), t, d), speed(1) {}
 
 AnimatedSpacer::AnimatedSpacer(Rect x, AnimatedWidget::easeType t, Direction d) : 
-  AnimatedRect(Rect(x.position, x.dimensions, TRANSPARENT), t, d) {}
+  AnimatedRect(Rect(x.position, x.dimensions, TRANSPARENT), t, d), speed(1) {}
 
 AnimatedCircle::AnimatedCircle(Circle x, AnimatedWidget::easeType t) : Circle(x) {
   animation = AnimatedWidget(t);
+  dimensions = {
+    radius * 2,
+    radius * 2
+  };
+  speed = 1;
   progress = 0;
 }
 
@@ -68,19 +74,20 @@ void AnimatedCircle::step(float delta) {
     for(int i = 0; i < entities.size(); i++)
       entities[i]->process(delta);
   else
-    progress += delta;
+    progress += delta * speed;
 }
 
 void AnimatedCircle::render() {
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++)
       entities[i]->render();
-  DrawCircleV(globalPos, radius * animation.ease(progress), colour);
+  DrawCircleV(globalPos + (Vector2){radius, radius}, radius * animation.ease(progress), colour);
 }
 
 AnimatedCircleSection::AnimatedCircleSection(CircleSection x, AnimatedWidget::easeType t) : CircleSection(x) {
   animation = AnimatedWidget(t);
   progress = 0;
+  speed = 1;
 }
 
 void AnimatedCircleSection::step(float delta) {
@@ -88,7 +95,7 @@ void AnimatedCircleSection::step(float delta) {
     for(int i = 0; i < entities.size(); i++)
       entities[i]->process(delta);
   else
-    progress += delta;
+    progress += delta * speed;
 }
 
 void AnimatedCircleSection::render() {
@@ -102,14 +109,17 @@ void AnimatedCircleSection::render() {
 AnimatedCircleSectionLines::AnimatedCircleSectionLines(CircleSectionLines x, AnimatedWidget::easeType t) : CircleSectionLines(x) {
   animation = AnimatedWidget(t);
   progress = 0;
+  speed = 1;
 }
 
 void AnimatedCircleSectionLines::step(float delta) {
   if(progress >= 1)
-    for(int i = 0; i < entities.size(); i++)
+    for(int i = 0; i < entities.size(); i++) {
       entities[i]->process(delta);
+      entities[i]->globalPos = entities[i]->position + position;
+    }
   else
-    progress += delta;
+    progress += delta * speed;
 }
 
 void AnimatedCircleSectionLines::render() {
@@ -117,13 +127,14 @@ void AnimatedCircleSectionLines::render() {
     for(int i = 0; i < entities.size(); i++)
       entities[i]->render();
   float scalar = animation.ease(progress);
-  DrawCircleSector(globalPos, radius, RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, colour);
-  DrawCircleSector(globalPos, radius - thickness, RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, BACKGROUND);
+  DrawCircleSector(globalPos + (Vector2){radius, radius}, radius, RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, colour);
+  DrawCircleSector(globalPos + (Vector2){radius, radius}, radius - thickness, RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, BACKGROUND);
 }
 
 AnimatedText::AnimatedText(Text x, AnimatedWidget::easeType t) : Text(x) {
   animation = AnimatedWidget(t);
   progress = 0;
+  speed = 1;
 }
 
 void AnimatedText::step(float delta) {
@@ -131,7 +142,7 @@ void AnimatedText::step(float delta) {
     for(int i = 0; i < entities.size(); i++)
       entities[i]->process(delta);
   else
-    progress += delta;
+    progress += delta * speed;
 }
 
 void AnimatedText::render() {

@@ -76,6 +76,8 @@ std::optional<Widget*> toml::parseWidget(toml::table table) {
     return parseText(table);
   else if(type == "animatedText")
     return parseAnimatedText(table);
+  else if(type == "box")
+    return parseBox(table);
   else return std::nullopt;
 }
 
@@ -115,11 +117,13 @@ std::optional<AnimatedRect*> toml::parseAnimatedRect(toml::table table) {
   if(!(colourM && xM && yM && widthM && heightM))
     return std::nullopt;
 
+  float speed = table["speed"].value<float>().value_or(1);
   Direction orientation = strToDirection(orientationM->data());
   AnimatedWidget::easeType type = strToAnimation(typeM.value_or("InOut")).value();
 
   AnimatedRect* rect = new AnimatedRect(Rect(xM.value(), yM.value(), widthM.value(), heightM.value(), hexToCol(colourM.value())), type, orientation);
   rect->entities = parseChildenThingy(table);
+  rect->speed = speed;
 
   return rect;
 }
@@ -144,11 +148,13 @@ std::optional<AnimatedSpacer*> toml::parseAnimatedSpacer(toml::table table) {
   if(!(xM && yM && widthM && heightM))
     return std::nullopt;
 
+  float speed = table["speed"].value<float>().value_or(1);
   Direction orientation = strToDirection(orientationM->data());
   AnimatedWidget::easeType type = strToAnimation(table["easeType"].value_or("InOut")).value();
 
   AnimatedSpacer* x = new AnimatedSpacer(Spacer(xM.value(), yM.value(), widthM.value(), heightM.value()), type, orientation);
   x->entities = parseChildenThingy(table);
+  x->speed = speed;
   return x;
 }
 
@@ -174,8 +180,11 @@ std::optional<AnimatedCircle*> toml::parseAnimatedCircle(toml::table table) {
   if(!(colourS && radiusM && xM && yM))
     return std::nullopt;
 
+  float speed = table["speed"].value<float>().value_or(1);
+
   AnimatedCircle* x = new AnimatedCircle(Circle(xM.value(), yM.value(), radiusM.value(), hexToCol(colourS.value())), easeType);
   x->entities = parseChildenThingy(table);
+  x->speed = speed;
   return x;
 }
 
@@ -213,6 +222,9 @@ std::optional<AnimatedCircleSection*> toml::parseAnimatedCircleSection(toml::tab
 
   if(!(colourS && radiusM && xM && yM && centerAngle && offsetAngle))
     return std::nullopt;
+
+  float speed = table["speed"].value<float>().value_or(1);
+
   AnimatedCircleSection* x = new AnimatedCircleSection(
       CircleSection(
         {
@@ -227,6 +239,7 @@ std::optional<AnimatedCircleSection*> toml::parseAnimatedCircleSection(toml::tab
     easeType
   );
   x->entities = parseChildenThingy(table);
+  x->speed = speed;
   return x;
 }
 
@@ -267,6 +280,9 @@ std::optional<AnimatedCircleSectionLines*> toml::parseAnimatedCircleSectionLines
 
   if(!(colourS && radiusM && xM && yM && centerAngle && offsetAngle && thicknessM))
     return std::nullopt;
+
+  float speed = table["speed"].value<float>().value_or(1);
+
   AnimatedCircleSectionLines* x = new AnimatedCircleSectionLines(
       CircleSectionLines(
         {
@@ -282,6 +298,7 @@ std::optional<AnimatedCircleSectionLines*> toml::parseAnimatedCircleSectionLines
     easeType
   );
   x->entities = parseChildenThingy(table);
+  x->speed = speed;
   return x;
 }
 
@@ -308,7 +325,8 @@ std::optional<Text*> toml::parseText(toml::table table) {
     {
       demsXM.value_or(0),
       demsYM.value_or(0)
-    });
+    },
+    hexToCol(colourM.value()));
 }
 
 std::optional<AnimatedText*> toml::parseAnimatedText(toml::table table) {
@@ -320,6 +338,7 @@ std::optional<AnimatedText*> toml::parseAnimatedText(toml::table table) {
   std::optional<float> demsXM = table["dimensionsX"].value<float>();
   std::optional<float> demsYM = table["dimensionsY"].value<float>();
   std::optional<std::string> type = table["fontType"].value<std::string>();
+  float speed = table["speed"].value<float>().value_or(1);
   AnimatedWidget::easeType easeType = strToAnimation(table["easeType"].value_or("InOut")).value();
 
   if(!(colourM && contentsM && sizeM && xM && yM))
@@ -335,8 +354,9 @@ std::optional<AnimatedText*> toml::parseAnimatedText(toml::table table) {
     {
       demsXM.value_or(0),
       demsYM.value_or(0)
-    }), easeType);
+    }, hexToCol(colourM.value())), easeType);
   x->entities = parseChildenThingy(table);
+  x->speed = speed;
   return x;
 }
 
@@ -347,4 +367,21 @@ SlideShow* toml::parseSlideShow(toml::table x) {
       if(el.is_table()) show->addSlide(parseSlide(*el.as_table()));
     });
   return show;
+}
+
+Box* toml::parseBox(toml::table x) {
+  Direction d = strToDirection(x["orientation"].value<std::string>().value_or("horizontal"));
+  Box* b = new Box(d, {});
+  b->position = {
+    x["x"].value<float>().value_or(0),
+    x["y"].value<float>().value_or(0)
+  };
+  if(toml::array* widgets = x["widgets"].as_array()) {
+    widgets->for_each([b](toml::node& x){
+      if(toml::table* table = x.as_table())
+        if(std::optional<Widget*> n = parseWidget(*table))
+          b->entities.push_back(n.value());
+    });
+  }
+  return b;
 }
