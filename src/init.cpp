@@ -2,21 +2,15 @@
 #include "engine/entity.hpp"
 #include "include.h"
 #include "slide.hpp"
+#include "toml.hpp"
 #include "widget.hpp"
 
 void init(Entity* root) {
   Text::loadFonts();
 
-  AnimatedCircle* x = new AnimatedCircle(Circle({.1, .1}, 100, HIGHLIGHT1), AnimatedWidget::InOut);
-  AnimatedCircle* y = new AnimatedCircle(Circle({.1, .1}, 100, HIGHLIGHT2), AnimatedWidget::InOut);
-  AnimatedText* z = new AnimatedText(Text("coolio\nboolio", body, {0, 0}, {10, 10}), AnimatedWidget::InOut);
+  toml::table config = toml::parse_file("test.toml");
 
-  Box* box = hBox({x, y, z});
-
-  box->position = {.1, .1};
-  Slide* s = new Slide({box});
-
-  SlideShow* show = new SlideShow({s});
+  SlideShow* show = toml::parseSlideShow(config);
 
   root->addChild(show);
 }

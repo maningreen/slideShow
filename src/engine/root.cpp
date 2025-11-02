@@ -6,7 +6,8 @@ const Vector2 Root::windowDimensions = {1920, 1080};
 const std::string Root::windowName = "cool presentation thing!";
 
 Root::Root() : Entity("root", nullptr) {
-  InitWindow(windowDimensions.x, windowDimensions.y, windowName.c_str());
+  InitWindow(0, 0, windowName.c_str());
+  MaximizeWindow();
   SetTargetFPS(60);
 }
 

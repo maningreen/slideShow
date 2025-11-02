@@ -64,6 +64,7 @@ struct Circle : Widget {
   float radius;
   Color colour;
   Circle(Vector2 p, float r, Color c);
+  Circle(float x, float y, float r, Color c);
   void render() override;
 };
 
@@ -87,7 +88,11 @@ Box* vBox(std::vector<Widget*> widgets);
 struct Text : Widget {
   std::string text;
   fontType type;
-  Text(std::string x, fontType y, Vector2 position, Vector2 dems);
+  Color col;
+  unsigned size;
+
+  Text(std::string x, fontType y, unsigned size, Vector2 position, Vector2 dems);
+  Text(std::string x, fontType y, unsigned size, Vector2 position, Vector2 dems, Color col);
   ~Text();
 
   void render() override;

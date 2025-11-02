@@ -1,0 +1,50 @@
+[[slides]]
+
+  [[slides.widgets]]
+
+  type = "rect"
+  x = 111
+  y = 111
+  width = 200
+  height = 200
+  colour = "#FFFFFF"
+
+  [[slides.widgets]]
+
+  type = "animatedCircle"
+  x = 100
+  y = 100
+  radius = 200
+  colour = "#FFAAAA"
+  easeType = "InOut"
+  orientation = "vertical"
+
+  [[slides.widgets]]
+
+  type = "animatedText"
+  x = 100
+  y = 100
+  size = 200
+  colour = "#FFAAAA"
+  fontType = "body"
+  contents = "god damn this"
+  easeType = "InOut"
+
+    [[slides.widgets.children]]
+
+    type = "circle"
+    x = 0
+    y = 0
+    colour = "#00FF00"
+    radius = 100
+
+[[slides]]
+
+  [[slides.widgets]]
+
+  type = "rect"
+  x = 111
+  y = 111
+  width = 200
+  height = 200
+  colour = "#FFFFFF"

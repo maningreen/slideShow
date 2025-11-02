@@ -53,10 +53,10 @@ void AnimatedRect::render() {
 }
 
 AnimatedSpacer::AnimatedSpacer(Spacer x, AnimatedWidget::easeType t, Direction d) : 
-  AnimatedRect(Rect(x.position, x.dimensions, TRANSPERENT), t, d) {}
+  AnimatedRect(Rect(x.position, x.dimensions, TRANSPARENT), t, d) {}
 
 AnimatedSpacer::AnimatedSpacer(Rect x, AnimatedWidget::easeType t, Direction d) : 
-  AnimatedRect(Rect(x.position, x.dimensions, TRANSPERENT), t, d) {}
+  AnimatedRect(Rect(x.position, x.dimensions, TRANSPARENT), t, d) {}
 
 AnimatedCircle::AnimatedCircle(Circle x, AnimatedWidget::easeType t) : Circle(x) {
   animation = AnimatedWidget(t);
@@ -142,6 +142,6 @@ void AnimatedText::render() {
   unsigned index = floor(scalar * text.length());
   char old = text[index];
   text[index] = '\0';
-  DrawTextEx(fonts[type], text.c_str(), globalPos, 40, 2, TEXT);
+  DrawTextEx(fonts[type], text.c_str(), globalPos, size, 2, col);
   text[index] = old;
 }

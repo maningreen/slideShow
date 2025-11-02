@@ -26,10 +26,10 @@ $(OUT): $(BUILDDIR) $(ENGINEOUT) $(OBJECTS)
 $(ENGINEOUT): $(ENGINEOBJS) # -c makes it not link
 	ar rcs $(ENGINEOUT) $(ENGINEOBJS)
 
-$(BUILDDIR)%.o: src/%.cpp $(BUILDDIR)
+$(BUILDDIR)%.o: src/%.cpp | $(BUILDDIR)
 	$(CC) -c $< -o $@
 
-$(BUILDDIR)%.o: src/engine/%.cpp $(BUILDDIR)
+$(BUILDDIR)%.o: src/engine/%.cpp | $(BUILDDIR)
 	$(CC) -c $< -o $@
 
 $(BUILDDIR):

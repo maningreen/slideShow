@@ -10,17 +10,15 @@ Widget::Widget(Vector2 p, Vector2 dimensions)
     : Entity2D("Widget", p), dimensions(dimensions),
       globalPos((Vector2){0, 0}) {}
 
-Widget::Widget(): Widget(Vector2Zero(), Vector2Zero()) {}
+Widget::Widget() : Widget(Vector2Zero(), Vector2Zero()) {}
 
 Widget::~Widget() {}
 
 void Widget::process(float delta) {
-  Vector2 screenDimensions = {
-    (float)GetScreenWidth(),
-    (float)GetScreenHeight()
-  };
-  for(int i = 0; i < entities.size(); i++)
-    entities[i]->globalPos = entities[i]->position + position * screenDimensions;
+  for(int i = 0; i < entities.size(); i++) {
+    entities[i]->step(delta);
+    entities[i]->globalPos = entities[i]->position + position;
+  }
   step(delta);
 }
 
@@ -106,12 +104,22 @@ void Rect::render() {
   DrawRectangle(globalPos.x, globalPos.y, dimensions.x, dimensions.y, colour);
 }
 
-Spacer::Spacer(float a, float b, float c, float d) : Rect(a, b, c, d, TRANSPERENT) {}
-Spacer::Spacer(Vector2 a, Vector2 b) : Rect(a, b, TRANSPERENT) {}
-Spacer::Spacer(Rectangle a) : Rect(a, TRANSPERENT) {}
+Spacer::Spacer(float a, float b, float c, float d) : Rect(a, b, c, d, TRANSPARENT) {}
+Spacer::Spacer(Vector2 a, Vector2 b) : Rect(a, b, TRANSPARENT) {}
+Spacer::Spacer(Rectangle a) : Rect(a, TRANSPARENT) {}
 
 Circle::Circle(Vector2 p, float r, Color c) {
   position = p;
+  radius = r;
+  colour = c;
+  dimensions = {radius * 2, radius * 2};
+}
+
+Circle::Circle(float x, float y, float r, Color c) {
+  position = {
+    x,
+    y
+  };
   radius = r;
   colour = c;
   dimensions = {radius * 2, radius * 2};
@@ -153,15 +161,26 @@ void Text::loadFonts() {
   fonts[0] = LoadFontEx("resources/body.ttf", 128, 0, 250); 
 }
 
-Text::Text(std::string x, fontType y, Vector2 p, Vector2 dems) {
-  dimensions = dems;
+Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems) {
   position = p;
   text = x;
   type = y;
+  size = s;
+  col = WHITE;
+  dimensions = dems;
+}
+
+Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems, Color c) {
+  position = p;
+  text = x;
+  type = y;
+  size = s;
+  col = c;
+  dimensions = dems;
 }
 
 Text::~Text() {}
 
 void Text::render() {
-  DrawTextEx(fonts[type], text.c_str(), globalPos, 100, 2, LIME);
+  DrawTextEx(fonts[type], text.c_str(), globalPos, size, 2, col);
 }

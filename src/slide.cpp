@@ -1,6 +1,6 @@
 #include "slide.hpp"
 #include "engine/entity.hpp"
-#include <algorithm>
+#include <iostream>
 #include <vector>
 
 Slide::~Slide() {
@@ -10,8 +10,10 @@ Slide::~Slide() {
 }
 
 void Slide::process(float delta) {
-  for(Widget** x = widgets.data(); x < widgets.data() + widgets.size(); x++)
-    (*x)->process(delta);
+  for(Widget** x = widgets.data(); x < widgets.data() + widgets.size(); x++) {
+    (*x)->step(delta);
+    (*x)->globalPos = (*x)->position;
+  }
 }
 
 void Slide::render() {
@@ -36,12 +38,10 @@ SlideShow::SlideShow() : Entity("SlideShow") {}
 void SlideShow::addSlide(Slide s) {
   Slide* n = new Slide(s);
   slides.push_back(n);
-  addChild(n);
 }
 
 void SlideShow::addSlide(Slide* s) {
   slides.push_back(s);
-  addChild(s);
 }
 
 SlideShow::~SlideShow() {}
@@ -57,14 +57,13 @@ void SlideShow::previousSlide() {
 void SlideShow::process(float delta) {
   if(IsKeyPressed(KEY_SPACE))
     nextSlide();
-  else if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-    nextSlide();
-  else if(KEY_BACK)
+  if(IsKeyPressed(KEY_BACK) || IsKeyPressed(KEY_BACKSPACE))
     previousSlide();
+  std::cout << currentSlide << '\n';
+  slides[currentSlide]->process(delta);
 }
 
 void SlideShow::render() {
   // :)
-  Slide* c = slides[currentSlide];
-  c->render();
+  slides[currentSlide]->render();
 }

@@ -1,0 +1,350 @@
+#include "toml.hpp"
+#include "include.h"
+#include "slide.hpp"
+#include "widget.hpp"
+#include "animatedWidgets.hpp"
+
+#include <optional>
+#include <vector>
+
+std::string lower(std::string s) {
+  for(char* c = s.data(); c < s.data() + s.length(); c++) 
+    *c = std::tolower(*c);
+  return s;
+}
+
+std::optional<AnimatedWidget::easeType> strToAnimation(std::string x) {
+  if(x == "In")
+    return AnimatedWidget::In;
+  else if(x == "Out")
+    return AnimatedWidget::Out;
+  else if(x == "InOut")
+    return AnimatedWidget::InOut;
+  else
+    return std::nullopt;
+}
+
+// returns Horizontal as a default if unable to parse.
+Direction strToDirection(std::string x) {
+  x = lower(x);
+  if(x == "vertical") return Vertical;
+  else return Horizontal;
+}
+
+Slide* toml::parseSlide(toml::table x) {
+  Slide* slide = new Slide;
+  if(toml::array* widgets = x["widgets"].as_array()) {
+    widgets->for_each([&](toml::node& el){
+      if(toml::table* table = el.as_table())
+        if(std::optional<Widget*> n = parseWidget(*table))
+          slide->widgets.push_back(n.value());
+    });
+  }
+  return slide;
+}
+
+fontType strToFontType(std::string x) {
+  if(x == "header");
+  return body;
+}
+
+std::optional<Widget*> toml::parseWidget(toml::table table) {
+  std::optional<std::string> type = table["type"].value<std::string>();
+  if(!type)
+    return std::nullopt;
+  else if(type == "rect")
+    return parseRect(table);
+  else if(type == "animatedRect")
+    return parseAnimatedRect(table);
+  else if(type == "spacer")
+    return parseSpacer(table);
+  else if(type == "animatedSpacer")
+    return parseAnimatedSpacer(table);
+  else if(type == "circle")
+    return parseCircle(table);
+  else if(type == "animatedCircle")
+    return parseAnimatedCircle(table);
+  else if(type == "circleSection")
+    return parseCircleSection(table);
+  else if(type == "animatedCircleSection")
+    return parseAnimatedCircleSection(table);
+  else if(type == "circleSectionLines")
+    return parseCircleSectionLines(table);
+  else if(type == "animatedCircleSectionLines")
+    return parseAnimatedCircleSectionLines(table);
+  else if(type == "text")
+    return parseText(table);
+  else if(type == "animatedText")
+    return parseAnimatedText(table);
+  else return std::nullopt;
+}
+
+std::vector<Widget*> parseChildenThingy(toml::table x) {
+  std::vector<Widget*> y;
+  if(toml::array* widgets = x["children"].as_array()) {
+    widgets->for_each([&](toml::node& el){
+      if(toml::table* table = el.as_table())
+        if(std::optional<Widget*> n = parseWidget(*table))
+          y.push_back(n.value());
+    });
+  }
+  return y;
+}
+
+std::optional<Rect*> toml::parseRect(toml::table table) {
+  std::optional<std::string> colourM = table["colour"].value<std::string>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+  std::optional<float> widthM = table["width"].value<float>();
+  std::optional<float> heightM = table["height"].value<float>();
+  std::vector<Widget*> kids;
+  if(!(colourM && xM && yM && widthM && heightM))
+    return std::nullopt;
+  else
+    return new Rect(xM.value(), yM.value(), widthM.value(), heightM.value(), hexToCol(colourM.value()));
+}
+
+std::optional<AnimatedRect*> toml::parseAnimatedRect(toml::table table) {
+  std::optional<std::string> colourM = table["colour"].value<std::string>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+  std::optional<float> widthM = table["width"].value<float>();
+  std::optional<float> heightM = table["height"].value<float>();
+  std::optional<std::string> typeM = table["easeType"].value<std::string>();
+  std::optional<std::string> orientationM = table["orientation"].value<std::string>();
+  if(!(colourM && xM && yM && widthM && heightM))
+    return std::nullopt;
+
+  Direction orientation = strToDirection(orientationM->data());
+  AnimatedWidget::easeType type = strToAnimation(typeM.value_or("InOut")).value();
+
+  AnimatedRect* rect = new AnimatedRect(Rect(xM.value(), yM.value(), widthM.value(), heightM.value(), hexToCol(colourM.value())), type, orientation);
+  rect->entities = parseChildenThingy(table);
+
+  return rect;
+}
+
+std::optional<Spacer*> toml::parseSpacer(toml::table table) {
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+  std::optional<float> widthM = table["width"].value<float>();
+  std::optional<float> heightM = table["height"].value<float>();
+  if(!(xM && yM && widthM && heightM))
+    return std::nullopt;
+  else 
+    return new Spacer(xM.value(), yM.value(), widthM.value(), heightM.value());
+}
+
+std::optional<AnimatedSpacer*> toml::parseAnimatedSpacer(toml::table table) {
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+  std::optional<float> widthM = table["width"].value<float>();
+  std::optional<float> heightM = table["height"].value<float>();
+  std::optional<std::string> orientationM = table["orientation"].value<std::string>();
+  if(!(xM && yM && widthM && heightM))
+    return std::nullopt;
+
+  Direction orientation = strToDirection(orientationM->data());
+  AnimatedWidget::easeType type = strToAnimation(table["easeType"].value_or("InOut")).value();
+
+  AnimatedSpacer* x = new AnimatedSpacer(Spacer(xM.value(), yM.value(), widthM.value(), heightM.value()), type, orientation);
+  x->entities = parseChildenThingy(table);
+  return x;
+}
+
+std::optional<Circle*> toml::parseCircle(toml::table table) {
+  std::optional<std::string> colourS = table["colour"].value<std::string>();
+  std::optional<float> radiusM = table["radius"].value<float>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+
+  if(!(colourS && radiusM && xM && yM))
+    return std::nullopt;
+  return new Circle(xM.value(), yM.value(), radiusM.value(), hexToCol(colourS.value()));
+}
+
+std::optional<AnimatedCircle*> toml::parseAnimatedCircle(toml::table table) {
+  std::optional<std::string> colourS = table["colour"].value<std::string>();
+  std::optional<float> radiusM = table["radius"].value<float>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+
+  AnimatedWidget::easeType easeType = strToAnimation(table["easeType"].value_or("InOut")).value();
+
+  if(!(colourS && radiusM && xM && yM))
+    return std::nullopt;
+
+  AnimatedCircle* x = new AnimatedCircle(Circle(xM.value(), yM.value(), radiusM.value(), hexToCol(colourS.value())), easeType);
+  x->entities = parseChildenThingy(table);
+  return x;
+}
+
+std::optional<CircleSection*> toml::parseCircleSection(toml::table table) {
+  std::optional<std::string> colourS = table["colour"].value<std::string>();
+  std::optional<float> radiusM = table["radius"].value<float>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+  std::optional<float> centerAngle = table["centerAngle"].value<float>();
+  std::optional<float> offsetAngle = table["offsetAngle"].value<float>();
+
+  if(!(colourS && radiusM && xM && yM && centerAngle && offsetAngle))
+    return std::nullopt;
+  return new CircleSection(
+    {
+      xM.value(),
+      yM.value()
+    },
+    radiusM.value(),
+    DEG2RAD * centerAngle.value(),
+    DEG2RAD * offsetAngle.value(),
+    hexToCol(colourS.value())
+  );
+}
+
+std::optional<AnimatedCircleSection*> toml::parseAnimatedCircleSection(toml::table table) {
+  AnimatedWidget::easeType easeType = strToAnimation(table["easeType"].value_or("InOut")).value();
+
+  std::optional<std::string> colourS = table["colour"].value<std::string>();
+  std::optional<float> radiusM = table["radius"].value<float>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+  std::optional<float> centerAngle = table["centerAngle"].value<float>();
+  std::optional<float> offsetAngle = table["offsetAngle"].value<float>();
+
+  if(!(colourS && radiusM && xM && yM && centerAngle && offsetAngle))
+    return std::nullopt;
+  AnimatedCircleSection* x = new AnimatedCircleSection(
+      CircleSection(
+        {
+          xM.value(),
+          yM.value()
+        },
+        radiusM.value(),
+        DEG2RAD * centerAngle.value(),
+        DEG2RAD * offsetAngle.value(),
+        hexToCol(colourS.value())
+      ),
+    easeType
+  );
+  x->entities = parseChildenThingy(table);
+  return x;
+}
+
+std::optional<CircleSectionLines*> toml::parseCircleSectionLines(toml::table table) {
+  std::optional<std::string> colourS = table["colour"].value<std::string>();
+  std::optional<float> radiusM = table["radius"].value<float>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+  std::optional<float> centerAngle = table["centerAngle"].value<float>();
+  std::optional<float> offsetAngle = table["offsetAngle"].value<float>();
+  std::optional<float> thicknessM = table["thickness"].value<float>();
+
+  if(!(colourS && radiusM && xM && yM && centerAngle && offsetAngle && thicknessM))
+    return std::nullopt;
+  return new CircleSectionLines(
+    {
+      xM.value(),
+      yM.value()
+    },
+    radiusM.value(),
+    DEG2RAD * centerAngle.value(),
+    DEG2RAD * offsetAngle.value(),
+    thicknessM.value(),
+    hexToCol(colourS.value())
+  );
+}
+
+std::optional<AnimatedCircleSectionLines*> toml::parseAnimatedCircleSectionLines(toml::table table) {
+  AnimatedWidget::easeType easeType = strToAnimation(table["easeType"].value_or("InOut")).value();
+
+  std::optional<std::string> colourS = table["colour"].value<std::string>();
+  std::optional<float> radiusM = table["radius"].value<float>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+  std::optional<float> centerAngle = table["centerAngle"].value<float>();
+  std::optional<float> offsetAngle = table["offsetAngle"].value<float>();
+  std::optional<float> thicknessM = table["thickness"].value<float>();
+
+  if(!(colourS && radiusM && xM && yM && centerAngle && offsetAngle && thicknessM))
+    return std::nullopt;
+  AnimatedCircleSectionLines* x = new AnimatedCircleSectionLines(
+      CircleSectionLines(
+        {
+          xM.value(),
+          yM.value()
+        },
+        radiusM.value(),
+        DEG2RAD * centerAngle.value(),
+        DEG2RAD * offsetAngle.value(),
+        thicknessM.value(),
+        hexToCol(colourS.value())
+      ),
+    easeType
+  );
+  x->entities = parseChildenThingy(table);
+  return x;
+}
+
+std::optional<Text*> toml::parseText(toml::table table) {
+  std::optional<std::string> colourM = table["colour"].value<std::string>();
+  std::optional<std::string> contentsM = table["contents"].value<std::string>();
+  std::optional<float> sizeM = table["size"].value<float>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+  std::optional<float> demsXM = table["dimensionsX"].value<float>();
+  std::optional<float> demsYM = table["dimensionsY"].value<float>();
+  std::optional<std::string> type = table["fontType"].value<std::string>();
+
+  if(!(colourM && contentsM && sizeM && xM && yM))
+    return std::nullopt;
+  return new Text(
+    contentsM.value(), 
+    strToFontType(type.value_or("")), 
+    sizeM.value(), 
+    {
+      xM.value(),
+      yM.value()
+    },
+    {
+      demsXM.value_or(0),
+      demsYM.value_or(0)
+    });
+}
+
+std::optional<AnimatedText*> toml::parseAnimatedText(toml::table table) {
+  std::optional<std::string> colourM = table["colour"].value<std::string>();
+  std::optional<std::string> contentsM = table["contents"].value<std::string>();
+  std::optional<float> sizeM = table["size"].value<float>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+  std::optional<float> demsXM = table["dimensionsX"].value<float>();
+  std::optional<float> demsYM = table["dimensionsY"].value<float>();
+  std::optional<std::string> type = table["fontType"].value<std::string>();
+  AnimatedWidget::easeType easeType = strToAnimation(table["easeType"].value_or("InOut")).value();
+
+  if(!(colourM && contentsM && sizeM && xM && yM))
+    return std::nullopt;
+  AnimatedText* x = new AnimatedText(Text(
+    contentsM.value(), 
+    strToFontType(type.value_or("")), 
+    sizeM.value(), 
+    {
+      xM.value(),
+      yM.value()
+    },
+    {
+      demsXM.value_or(0),
+      demsYM.value_or(0)
+    }), easeType);
+  x->entities = parseChildenThingy(table);
+  return x;
+}
+
+SlideShow* toml::parseSlideShow(toml::table x) {
+  SlideShow* show = new SlideShow((std::vector<Slide>){});
+  if(toml::array* y = x["slides"].as_array())
+    y->for_each([&](toml::node& el){
+      if(el.is_table()) show->addSlide(parseSlide(*el.as_table()));
+    });
+  return show;
+}

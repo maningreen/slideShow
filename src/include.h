@@ -1,8 +1,7 @@
 #ifndef in_h
 #define in_h
 
-#define min(a, b) (a < b ? a : b)
-#define max(a, b) (a > b ? a : b)
+#include <string>
 
 #include "../external/raylib-5.5/raylib.h"
 #include "../external/raylib-5.5/raymath.h"
@@ -15,11 +14,13 @@
 #define HIGHLIGHT1 (Color){141, 134, 201, 255}
 #define HIGHLIGHT2 (Color){114, 90, 193, 255}
 
-#define TRANSPERENT (Color){0, 0, 0, 0}
+#define TRANSPARENT (Color){0, 0, 0, 0}
 
 enum Direction {
   Vertical,
   Horizontal
 };
+
+Color hexToCol(std::string);
 
 #endif
