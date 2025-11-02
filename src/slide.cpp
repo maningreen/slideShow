@@ -1,6 +1,5 @@
 #include "slide.hpp"
 #include "engine/entity.hpp"
-#include <iostream>
 #include <vector>
 
 Slide::~Slide() {
@@ -59,7 +58,6 @@ void SlideShow::process(float delta) {
     nextSlide();
   if(IsKeyPressed(KEY_BACK) || IsKeyPressed(KEY_BACKSPACE))
     previousSlide();
-  std::cout << currentSlide << '\n';
   slides[currentSlide]->process(delta);
 }
 
