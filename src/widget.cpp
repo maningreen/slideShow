@@ -16,8 +16,8 @@ Widget::~Widget() {}
 
 void Widget::process(float delta) {
   for(int i = 0; i < entities.size(); i++) {
-    entities[i]->step(delta);
     entities[i]->globalPos = entities[i]->position + position;
+    entities[i]->step(delta);
   }
   step(delta);
 }

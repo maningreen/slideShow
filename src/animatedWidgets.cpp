@@ -39,8 +39,8 @@ AnimatedRect::AnimatedRect(Rect x, AnimatedWidget::easeType t, Direction z) : Re
 void AnimatedRect::step(float delta) {
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++) {
-      entities[i]->process(delta);
-      entities[i]->globalPos = entities[i]->position + position;
+      entities[i]->globalPos = entities[i]->position + globalPos;
+      entities[i]->step(delta);
     }
   else
     progress += delta * speed;
@@ -75,8 +75,10 @@ AnimatedCircle::AnimatedCircle(Circle x, AnimatedWidget::easeType t) : Circle(x)
 
 void AnimatedCircle::step(float delta) {
   if(progress >= 1)
-    for(int i = 0; i < entities.size(); i++)
-      entities[i]->process(delta);
+    for(int i = 0; i < entities.size(); i++) {
+      entities[i]->globalPos = entities[i]->position + globalPos;
+      entities[i]->step(delta);
+    }
   else
     progress += delta * speed;
 }
@@ -96,8 +98,10 @@ AnimatedCircleSection::AnimatedCircleSection(CircleSection x, AnimatedWidget::ea
 
 void AnimatedCircleSection::step(float delta) {
   if(progress >= 1)
-    for(int i = 0; i < entities.size(); i++)
-      entities[i]->process(delta);
+    for(int i = 0; i < entities.size(); i++) {
+      entities[i]->globalPos = entities[i]->position + globalPos;
+      entities[i]->step(delta);
+    }
   else
     progress += delta * speed;
 }
@@ -119,8 +123,8 @@ AnimatedCircleSectionLines::AnimatedCircleSectionLines(CircleSectionLines x, Ani
 void AnimatedCircleSectionLines::step(float delta) {
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++) {
-      entities[i]->process(delta);
-      entities[i]->globalPos = entities[i]->position + this->position;
+      entities[i]->globalPos = entities[i]->position + globalPos;
+      entities[i]->step(delta);
     }
   else
     progress += delta * speed;
@@ -144,8 +148,8 @@ AnimatedText::AnimatedText(Text x, AnimatedWidget::easeType t) : Text(x) {
 void AnimatedText::step(float delta) {
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++) {
-      entities[i]->globalPos = entities[i]->position + this->position;
-      entities[i]->process(delta);
+      entities[i]->globalPos = entities[i]->position + globalPos;
+      entities[i]->step(delta);
     }
   else
     progress += delta * speed;
