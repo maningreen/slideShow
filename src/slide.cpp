@@ -22,18 +22,22 @@ void Slide::render() {
 }
 
 SlideShow::SlideShow(std::vector<Slide> s) : Entity("SlideShow") {
+  background = BLACK;
   currentSlide = 0;
   for(Slide* x = s.data(); x < s.data() + s.size(); x++)
     addSlide(*x);
 }
 
 SlideShow::SlideShow(std::vector<Slide*> s) : Entity("SlideShow"), slides(s) {
+  background = BLACK;
   currentSlide = 0;
   for(Slide** x = s.data(); x < s.data() + s.size(); x++)
     addChild(*x);
 }
 
-SlideShow::SlideShow() : Entity("SlideShow") {}
+SlideShow::SlideShow() : Entity("SlideShow") {
+  background = BLACK;
+}
 
 void SlideShow::addSlide(Slide s) {
   Slide* n = new Slide(s);
@@ -64,4 +68,5 @@ void SlideShow::process(float delta) {
 
 void SlideShow::render() {
   slides[currentSlide]->render();
+  ClearBackground(background);
 }

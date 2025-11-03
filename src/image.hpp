@@ -10,6 +10,8 @@ struct ImageWidget : Widget {
 
   void render() override;
 
+  Rectangle crop;
+
   ImageWidget(Image source, Vector2 p);
   ImageWidget(std::string source, Vector2 p);
   ImageWidget(char* source, Vector2 p);

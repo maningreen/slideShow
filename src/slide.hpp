@@ -22,6 +22,8 @@ struct SlideShow : Entity {
 
   unsigned currentSlide;
 
+  Color background;
+
   void process(float delta) override;
   void render() override;
 

@@ -4,7 +4,6 @@
 #include <cmath>
 #include <cstdio>
 #include <cstring>
-#include <iostream>
 #include <vector>
 
 Widget::Widget(Vector2 p, Vector2 dimensions)
@@ -160,6 +159,15 @@ Font Text::fonts[0];
 
 void Text::loadFonts() {
   fonts[0] = LoadFontEx("resources/body.ttf", 128, 0, 250); 
+}
+
+Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Color c) {
+  dimensions = MeasureTextEx(fonts[y], x.c_str(), s, 2);
+  position = p - dimensions / (Vector2){2, 2};
+  text = x;
+  type = y;
+  size = s;
+  col = c;
 }
 
 Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems) {

@@ -54,7 +54,7 @@ Slide* toml::parseSlide(toml::table x) {
 }
 
 fontType strToFontType(std::string x) {
-  if(x == "header") 
+  if(x == "header") return body;
   return body;
 }
 
@@ -328,19 +328,32 @@ std::optional<Text*> toml::parseText(toml::table table) {
 
   if(!(colourM && contentsM && sizeM && xM && yM))
     return std::nullopt;
-  return new Text(
-    contentsM.value(), 
-    strToFontType(type.value_or("")), 
-    sizeM.value(), 
-    {
-      xM.value(),
-      yM.value()
-    },
-    {
-      demsXM.value_or(0),
-      demsYM.value_or(0)
-    },
-    hexToCol(colourM.value()));
+  else if(demsYM && demsXM)
+    return new Text(
+      contentsM.value(), 
+      strToFontType(type.value_or("")), 
+      sizeM.value(), 
+      {
+        xM.value(),
+        yM.value()
+      },
+      {
+        demsXM.value(),
+        demsYM.value()
+      },
+      hexToCol(colourM.value())
+    );
+  else
+    return new Text(
+      contentsM.value(), 
+      strToFontType(type.value_or("")), 
+      sizeM.value(), 
+      {
+        xM.value(),
+        yM.value()
+      },
+      hexToCol(colourM.value())
+    );
 }
 
 std::optional<AnimatedText*> toml::parseAnimatedText(toml::table table) {
@@ -375,11 +388,13 @@ std::optional<AnimatedText*> toml::parseAnimatedText(toml::table table) {
 }
 
 SlideShow* toml::parseSlideShow(toml::table x) {
-  SlideShow* show = new SlideShow((std::vector<Slide>){});
+  SlideShow* show = new SlideShow((std::vector<Slide*>){});
   if(toml::array* y = x["slides"].as_array())
-    y->for_each([&](toml::node& el){
-      if(el.is_table()) show->addSlide(parseSlide(*el.as_table()));
+    y->for_each([&](toml::node& node){
+      if(node.is_table()) show->addSlide(parseSlide(*node.as_table()));
     });
+  if(std::optional<Color> background = hexToCol(x["background"].value_or(""))) show->background = background.value();
+  else show->background = BLACK;
   return show;
 }
 
@@ -402,12 +417,20 @@ Box* toml::parseBox(toml::table x) {
 
 std::optional<ImageWidget*> toml::parseImage(toml::table table) {
   std::optional<std::string> source = table["source"].value<std::string>();
-  std::optional<float> x = table["x"].value<float>();
-  std::optional<float> y = table["y"].value<float>();
+  std::optional<Vector2> pos = parseVector2(table);
 
-  if(!(source && x && y))
+  if(!(source && pos))
     return std::nullopt;
-  return new ImageWidget(source.value(), {x.value(), y.value()});
+
+  ImageWidget* x = new ImageWidget(source.value(), pos.value());
+
+  if(table["cropping"].is_table()) {
+    std::optional<Rectangle> cropped = parseRectangle(*table["cropping"].as_table());
+    if(cropped)
+      x->crop = cropped.value();
+  }
+
+  return x;
 }
 
 std::optional<AnimatedImageWidget*> toml::parseAnimatedImage(toml::table table) {
@@ -427,4 +450,26 @@ std::optional<AnimatedImageWidget*> toml::parseAnimatedImage(toml::table table) 
   UnloadImage(image);
   x->entities = parseChildenThingy(table);
   return x;
+}
+
+std::optional<Vector2> toml::parseVector2(toml::table table) {
+  std::optional<float> x = table["x"].value<float>();
+  std::optional<float> y = table["y"].value<float>();
+
+  if(x && y)
+    return (Vector2){x.value(), y.value()};
+  else
+    return std::nullopt;
+}
+
+std::optional<Rectangle> toml::parseRectangle(toml::table table) {
+  std::optional<float> x = table["x"].value<float>();
+  std::optional<float> y = table["y"].value<float>();
+  std::optional<float> width = table["height"].value<float>();
+  std::optional<float> height = table["height"].value<float>();
+
+  if(x && y && width && height)
+    return (Rectangle){x.value(), y.value(), width.value(), height.value()};
+  else
+    return std::nullopt;
 }

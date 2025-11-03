@@ -36,6 +36,9 @@ namespace toml {
   std::optional<ImageWidget*> parseImage(toml::table);
   std::optional<AnimatedImageWidget*> parseAnimatedImage(toml::table);
 
+  std::optional<Vector2> parseVector2(toml::table);
+  std::optional<Rectangle> parseRectangle(toml::table);
+
   Box* parseBox(toml::table);
 }
 

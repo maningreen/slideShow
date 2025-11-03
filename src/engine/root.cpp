@@ -27,7 +27,6 @@ void Root::process(float delta) {
 void Root::render() {
   BeginDrawing();
   BeginTextureMode(renderTexture);
-  ClearBackground(BACKGROUND);
   for(Entity* child : children)
     manageChildrenRendering(child);
 }

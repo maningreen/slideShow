@@ -1,3 +1,11 @@
+#11111B
+#725AC1
+#8D86C9
+#CAC4CE
+#F7ECE1
+
+background = "#11111B"
+
 [[slides]]
 
   [[slides.widgets]]
@@ -11,7 +19,7 @@
 
   radius = 40
   thickness = 5
-  colour = "#FFFFFF"
+  colour = "#F7ECE1"
   easeType = "In"
   speed = 2
 
@@ -22,7 +30,7 @@
     width = 1745
     height = 5
     orientation = "right"
-    colour = "#FFFFFF"
+    colour = "#F7ECE1"
     easeType = "Out"
     speed = 0.5
 
@@ -32,7 +40,7 @@
     y = 40
     width = 5
     height = 905
-    colour = "#FFFFFF"
+    colour = "#F7ECE1"
     easeType = "Out"
     orientation = "down"
     speed = 0.5
@@ -48,9 +56,9 @@
 
   radius = 40
   thickness = 5
-  colour = "#FFFFFF"
-  easeType = "In"
-  speed = 2
+  colour = "#F7ECE1"
+  easeType = "InOut"
+  speed = 1
 
   [[slides.widgets]]
 
@@ -63,7 +71,7 @@
 
   radius = 40
   thickness = 5
-  colour = "#FFFFFF"
+  colour = "#F7ECE1"
   easeType = "In"
   speed = 2
 
@@ -78,9 +86,9 @@
 
     radius = 40
     thickness = 5
-    colour = "#FFFFFF"
+    colour = "#F7ECE1"
     easeType = "InOut"
-    speed = 2
+    speed = 1
   
     [[slides.widgets.children]]
     type = "animatedRect"
@@ -88,7 +96,7 @@
     y = 75
     width = 1750
     height = 5
-    colour = "#FFFFFF"
+    colour = "#F7ECE1"
     easeType = "Out"
     orientation = "left"
     speed = 0.5
@@ -99,7 +107,7 @@
     y = -865
     width = 5
     height = 905
-    colour = "#FFFFFF"
+    colour = "#F7ECE1"
     easeType = "Out"
     orientation = "up"
     speed = 0.5
@@ -107,7 +115,7 @@
   [[slides.widgets]]
   type = "animatedText"
 
-  colour = "#FFFFFF"
+  colour = "#F7ECE1"
   size = 100
   x = 960
   y = 540
@@ -118,7 +126,7 @@
   [[slides.widgets]]
   type = "animatedText"
 
-  colour = "#AAAAAA"
+  colour = "#CAC4CE"
   size = 50
   x = 960
   y = 640
@@ -126,4 +134,12 @@
 
   style = "body"
 
-[[slides ]
+[[slides]]
+  
+  [[slides.widgets]]
+  type = "animatedImage"
+  source = "./resources/test.jpg"
+  direction = "left"
+  speed = 1
+  x = 0
+  y = 0

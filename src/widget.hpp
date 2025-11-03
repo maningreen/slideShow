@@ -91,6 +91,7 @@ struct Text : Widget {
   Color col;
   unsigned size;
 
+  Text(std::string x, fontType y, unsigned size, Vector2 position, Color col);
   Text(std::string x, fontType y, unsigned size, Vector2 position, Vector2 dems);
   Text(std::string x, fontType y, unsigned size, Vector2 position, Vector2 dems, Color col);
   ~Text();

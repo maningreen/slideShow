@@ -7,8 +7,8 @@ ImageWidget::ImageWidget(Image s, Vector2 p) {
   position = p;
   source = LoadTextureFromImage(s);
   dimensions = {
-    (float)source.width,
-    (float)source.height
+    .x = (float)source.width,
+    .y = (float)source.height
   };
 }
 
@@ -18,8 +18,8 @@ ImageWidget::ImageWidget(std::string s, Vector2 p) {
   source = LoadTextureFromImage(img);
   UnloadImage(img);
   dimensions = {
-    (float)source.width,
-    (float)source.height
+    .x = (float)source.width,
+    .y = (float)source.height
   };
 }
 
@@ -29,8 +29,8 @@ ImageWidget::ImageWidget(char* s, Vector2 p) {
   source = LoadTextureFromImage(img);
   UnloadImage(img);
   dimensions = {
-    (float)source.width,
-    (float)source.height
+    .x = (float)source.width,
+    .y = (float)source.height
   };
 }
 
@@ -39,17 +39,37 @@ ImageWidget::~ImageWidget() {
 }
 
 void ImageWidget::render() {
-  DrawTextureV(source, position, WHITE);
+  DrawTexturePro(source, (Rectangle){
+    0,
+    0,
+    dimensions.x,
+    dimensions.y,
+  }, (Rectangle){
+    position.x,
+    position.y,
+    dimensions.x,
+    dimensions.y,
+  }, Vector2Zero(), 0, WHITE);
 }
 
 AnimatedImageWidget::AnimatedImageWidget(ImageWidget base, AnimatedWidget::easeType type) : ImageWidget(base) {
   dir = Right;
   animation = AnimatedWidget(type);
+  progress = 0;
+  dimensions = {
+    .x = (float)source.width,
+    .y = (float)source.height
+  };
 }
 
 AnimatedImageWidget::AnimatedImageWidget(ImageWidget base, AnimatedWidget::easeType type, Direction d) : ImageWidget(base) {
   dir = d;
   animation = AnimatedWidget(type);
+  progress = 0;
+  dimensions = {
+    .x = (float)source.width,
+    .y = (float)source.height
+  };
 }
 
 AnimatedImageWidget::~AnimatedImageWidget() {
@@ -67,15 +87,17 @@ void AnimatedImageWidget::render() {
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++)
       entities[i]->render();
-  // DrawTexturePro(source, (Rectangle){
-        // 0,
-        // 0,
-        // scaleX * source.width,
-        // scaleY * source.height,
-      // }, (Rectangle){
-        // position.x,
-        // position.y,
-        // scaleX * source.width,
-        // scaleY * source.height,
-      /* // }, Vector2Zero(), 0, WHITE); */
+  float scaleX = dir == Right || dir == Left ? animation.ease(progress) : 1;
+  float scaleY = dir == Up || dir == Down ? animation.ease(progress) : 1;
+  DrawTexturePro(source, (Rectangle){
+    0,
+    0,
+    (float)source.width * scaleX,
+    (float)source.height * scaleY,
+  }, (Rectangle){
+    position.x,
+    position.y,
+    (float)source.width * scaleX,
+    (float)source.height * scaleY,
+  }, Vector2Zero(), 0, WHITE);
 }
