@@ -12,6 +12,7 @@ public:
   Root();
   ~Root();
 
+  RenderTexture renderTexture;
 
   void process(float delta) override;
   void render() override;

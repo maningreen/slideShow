@@ -33,7 +33,7 @@ struct Widget : Entity2D {
 //  hBox(Widget());
 // stacks items on top of another.
 struct Box : Widget {
-  Box(Direction dir, std::vector<Widget*>);
+  Box(Orientation dir, std::vector<Widget*>);
   ~Box();
 
   void step(float delta) override;
@@ -41,7 +41,7 @@ struct Box : Widget {
 
   private:
     // the direction in which to order things
-    Direction dir;
+    Orientation dir;
 };
 
 struct Rect : Widget {

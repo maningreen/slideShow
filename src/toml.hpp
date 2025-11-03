@@ -2,6 +2,7 @@
 #define toml_h
 
 #include "animatedWidgets.hpp"
+#include "image.hpp"
 #include "include.h"
 #include "slide.hpp"
 #include "widget.hpp"
@@ -31,6 +32,9 @@ namespace toml {
 
   std::optional<Text*> parseText(toml::table);
   std::optional<AnimatedText*> parseAnimatedText(toml::table);
+
+  std::optional<ImageWidget*> parseImage(toml::table);
+  std::optional<AnimatedImageWidget*> parseAnimatedImage(toml::table);
 
   Box* parseBox(toml::table);
 }

@@ -1,4 +1,5 @@
 #include "toml.hpp"
+#include "image.hpp"
 #include "include.h"
 #include "slide.hpp"
 #include "widget.hpp"
@@ -25,10 +26,19 @@ std::optional<AnimatedWidget::easeType> strToAnimation(std::string x) {
 }
 
 // returns Horizontal as a default if unable to parse.
-Direction strToDirection(std::string x) {
+Orientation strToOrientation(std::string x) {
   x = lower(x);
   if(x == "vertical") return Vertical;
   else return Horizontal;
+}
+
+std::optional<Direction> strToDir(std::string x) {
+  x = lower(x);
+  if(x == "up") return Up;
+  else if(x == "down") return Down;
+  else if(x == "left") return Left;
+  else if(x == "right") return Right;
+  else return std::nullopt;
 }
 
 Slide* toml::parseSlide(toml::table x) {
@@ -44,7 +54,7 @@ Slide* toml::parseSlide(toml::table x) {
 }
 
 fontType strToFontType(std::string x) {
-  if(x == "header");
+  if(x == "header") 
   return body;
 }
 
@@ -78,6 +88,10 @@ std::optional<Widget*> toml::parseWidget(toml::table table) {
     return parseAnimatedText(table);
   else if(type == "box")
     return parseBox(table);
+  else if(type == "image")
+    return parseImage(table);
+  else if(type == "animatedImage")
+    return parseAnimatedImage(table);
   else return std::nullopt;
 }
 
@@ -118,7 +132,7 @@ std::optional<AnimatedRect*> toml::parseAnimatedRect(toml::table table) {
     return std::nullopt;
 
   float speed = table["speed"].value<float>().value_or(1);
-  Direction orientation = strToDirection(orientationM->data());
+  Direction orientation = strToDir(orientationM->data()).value_or(Down);
   AnimatedWidget::easeType type = strToAnimation(typeM.value_or("InOut")).value();
 
   AnimatedRect* rect = new AnimatedRect(Rect(xM.value(), yM.value(), widthM.value(), heightM.value(), hexToCol(colourM.value())), type, orientation);
@@ -149,7 +163,7 @@ std::optional<AnimatedSpacer*> toml::parseAnimatedSpacer(toml::table table) {
     return std::nullopt;
 
   float speed = table["speed"].value<float>().value_or(1);
-  Direction orientation = strToDirection(orientationM->data());
+  Direction orientation = strToDir(orientationM->data()).value_or(Up);
   AnimatedWidget::easeType type = strToAnimation(table["easeType"].value_or("InOut")).value();
 
   AnimatedSpacer* x = new AnimatedSpacer(Spacer(xM.value(), yM.value(), widthM.value(), heightM.value()), type, orientation);
@@ -370,7 +384,7 @@ SlideShow* toml::parseSlideShow(toml::table x) {
 }
 
 Box* toml::parseBox(toml::table x) {
-  Direction d = strToDirection(x["orientation"].value<std::string>().value_or("horizontal"));
+  Orientation d = strToOrientation(x["orientation"].value<std::string>().value_or("horizontal"));
   Box* b = new Box(d, {});
   b->position = {
     x["x"].value<float>().value_or(0),
@@ -384,4 +398,33 @@ Box* toml::parseBox(toml::table x) {
     });
   }
   return b;
+}
+
+std::optional<ImageWidget*> toml::parseImage(toml::table table) {
+  std::optional<std::string> source = table["source"].value<std::string>();
+  std::optional<float> x = table["x"].value<float>();
+  std::optional<float> y = table["y"].value<float>();
+
+  if(!(source && x && y))
+    return std::nullopt;
+  return new ImageWidget(source.value(), {x.value(), y.value()});
+}
+
+std::optional<AnimatedImageWidget*> toml::parseAnimatedImage(toml::table table) {
+  std::optional<std::string> sourceM = table["source"].value<std::string>();
+  std::optional<float> xM = table["x"].value<float>();
+  std::optional<float> yM = table["y"].value<float>();
+
+  if(!(sourceM && xM && yM))
+    return std::nullopt;
+
+  Direction dir = strToDir(table["direction"].value_or("")).value_or(Up);
+  AnimatedWidget::easeType type = strToAnimation(table["direction"].value_or("")).value_or(AnimatedWidget::InOut);
+  AnimatedImageWidget* x = new AnimatedImageWidget(ImageWidget(sourceM.value(), {xM.value(), yM.value()}), type, dir);
+  UnloadTexture(x->source);
+  Image image = LoadImage(sourceM.value().c_str());
+  x->source = LoadTextureFromImage(image);
+  UnloadImage(image);
+  x->entities = parseChildenThingy(table);
+  return x;
 }

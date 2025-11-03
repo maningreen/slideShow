@@ -1,5 +1,6 @@
 #include "slide.hpp"
 #include "engine/entity.hpp"
+#include "widget.hpp"
 #include <vector>
 
 Slide::~Slide() {
@@ -62,6 +63,5 @@ void SlideShow::process(float delta) {
 }
 
 void SlideShow::render() {
-  // :)
   slides[currentSlide]->render();
 }

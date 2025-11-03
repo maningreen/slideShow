@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 #include <vector>
 
 Widget::Widget(Vector2 p, Vector2 dimensions)
@@ -31,7 +32,7 @@ void Widget::death() {
 
 void Widget::step(float delta) {}
 
-Box::Box(Direction d, std::vector<Widget*> widgets) {
+Box::Box(Orientation d, std::vector<Widget*> widgets) {
   dir = d;
   entities = widgets;
   position = Vector2Zero();
@@ -59,7 +60,7 @@ void Box::step(float delta) {
       if(dimensions.x < entities[i]->dimensions.x)
         dimensions.x = entities[i]->dimensions.x;
     }
-    else if (dir == Horizontal){
+    else if (dir == Horizontal) {
       dimensions.x += entities[i]->dimensions.x;
 
       entities[i]->position.x = entities[i - 1]->dimensions.x + entities[i - 1]->position.x;
@@ -152,7 +153,7 @@ CircleSectionLines::CircleSectionLines(Vector2 p, float r, float centerTheta, fl
 void CircleSectionLines::render() {
   Vector2 center = globalPos + (Vector2){radius, radius};
   DrawCircleSector(center, radius, RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, colour);
-  DrawCircleSector(center, radius - thickness, RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, BACKGROUND);
+  DrawCircleSector(center, (radius - thickness), RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, BACKGROUND);
 }
 
 Font Text::fonts[0];
@@ -162,7 +163,7 @@ void Text::loadFonts() {
 }
 
 Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems) {
-  position = p;
+  position = p - MeasureTextEx(fonts[y], x.c_str(), s, 2) / (Vector2){2, 2};
   text = x;
   type = y;
   size = s;
@@ -171,7 +172,7 @@ Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems) {
 }
 
 Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems, Color c) {
-  position = p;
+  position = p - MeasureTextEx(fonts[y], x.c_str(), s, 2) / (Vector2){2, 2};
   text = x;
   type = y;
   size = s;

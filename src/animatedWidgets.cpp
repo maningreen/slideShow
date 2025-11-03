@@ -38,8 +38,10 @@ AnimatedRect::AnimatedRect(Rect x, AnimatedWidget::easeType t, Direction z) : Re
 
 void AnimatedRect::step(float delta) {
   if(progress >= 1)
-    for(int i = 0; i < entities.size(); i++)
+    for(int i = 0; i < entities.size(); i++) {
       entities[i]->process(delta);
+      entities[i]->globalPos = entities[i]->position + position;
+    }
   else
     progress += delta * speed;
 }
@@ -48,9 +50,11 @@ void AnimatedRect::render() {
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++)
       entities[i]->render();
-  float scaleX = dir == Horizontal ? animation.ease(progress) : 1;
-  float scaleY = dir == Vertical ? animation.ease(progress) : 1;
-  DrawRectangle(globalPos.x, globalPos.y, dimensions.x * scaleX, dimensions.y * scaleY, colour);
+  float offsetX = dir == Left ? dimensions.x * (1 - animation.ease(progress)) : 1;
+  float offsetY = dir == Up ? dimensions.y * (1 - animation.ease(progress)) : 1;
+  float scaleX = dir == Left || dir == Right ? animation.ease(progress) : 1;
+  float scaleY = dir == Down || dir == Up ? animation.ease(progress) : 1;
+  DrawRectangle(globalPos.x + offsetX, globalPos.y + offsetY, dimensions.x * scaleX, dimensions.y * scaleY, colour);
 }
 
 AnimatedSpacer::AnimatedSpacer(Spacer x, AnimatedWidget::easeType t, Direction d) : 
@@ -116,7 +120,7 @@ void AnimatedCircleSectionLines::step(float delta) {
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++) {
       entities[i]->process(delta);
-      entities[i]->globalPos = entities[i]->position + position;
+      entities[i]->globalPos = entities[i]->position + this->position;
     }
   else
     progress += delta * speed;
@@ -128,7 +132,7 @@ void AnimatedCircleSectionLines::render() {
       entities[i]->render();
   float scalar = animation.ease(progress);
   DrawCircleSector(globalPos + (Vector2){radius, radius}, radius, RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, colour);
-  DrawCircleSector(globalPos + (Vector2){radius, radius}, radius - thickness, RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, BACKGROUND);
+  DrawCircleSector(globalPos + (Vector2){radius, radius}, (radius - thickness), RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, BACKGROUND);
 }
 
 AnimatedText::AnimatedText(Text x, AnimatedWidget::easeType t) : Text(x) {
@@ -139,8 +143,10 @@ AnimatedText::AnimatedText(Text x, AnimatedWidget::easeType t) : Text(x) {
 
 void AnimatedText::step(float delta) {
   if(progress >= 1)
-    for(int i = 0; i < entities.size(); i++)
+    for(int i = 0; i < entities.size(); i++) {
+      entities[i]->globalPos = entities[i]->position + this->position;
       entities[i]->process(delta);
+    }
   else
     progress += delta * speed;
 }

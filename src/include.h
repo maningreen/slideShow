@@ -17,8 +17,15 @@
 #define TRANSPARENT (Color){0, 0, 0, 0}
 
 enum Direction {
-  Vertical,
-  Horizontal
+  Up,
+  Down,
+  Left,
+  Right
+};
+
+enum Orientation {
+  Horizontal,
+  Vertical
 };
 
 Color hexToCol(std::string);

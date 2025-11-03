@@ -9,9 +9,11 @@ Root::Root() : Entity("root", nullptr) {
   InitWindow(0, 0, windowName.c_str());
   MaximizeWindow();
   SetTargetFPS(60);
+  renderTexture = LoadRenderTexture(1920, 1080);
 }
 
 Root::~Root() {
+  UnloadRenderTexture(renderTexture);
   CloseWindow();
 }
 
@@ -24,11 +26,17 @@ void Root::process(float delta) {
 
 void Root::render() {
   BeginDrawing();
+  BeginTextureMode(renderTexture);
+  ClearBackground(BACKGROUND);
   for(Entity* child : children)
     manageChildrenRendering(child);
 }
 
 void Root::postRender() {
+  EndTextureMode();
+
+  DrawTexturePro(renderTexture.texture, (Rectangle){0, 0, windowDimensions.x, -windowDimensions.y}, (Rectangle){0, 0, (float)GetScreenWidth(), -(float)GetScreenHeight()}, {0, 0}, 0, WHITE);
+
   EndDrawing();
 }
 

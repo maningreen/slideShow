@@ -1,103 +1,129 @@
 [[slides]]
 
   [[slides.widgets]]
-
-  type = "rect"
-  x = 111
-  y = 111
-  width = 200
-  height = 200
-  colour = "#FFFFFF"
-
-  [[slides.widgets]]
-
-  type = "animatedCircle"
-  x = 100
-  y = 100
-  radius = 200
-  colour = "#FFAAAA"
-  easeType = "InOut"
-  orientation = "vertical"
-
-  [[slides.widgets]]
-
-  type = "animatedText"
-  x = 100
-  y = 100
-  size = 100
-  colour = "#F0000F"
-  fontType = "body"
-  contents = """
-  this was so easy tbh
-  not even difficult
-  i aint even capping
-  """
-  easeType = "InOut"
-
-    [[slides.widgets.children]]
-    x = 100
-    y = 100
-    type = "box"
-    orientation = "vertical"
-
-      [[slides.widgets.children.widgets]]
-      type = "animatedCircle"
-      x = 0
-      y = 0
-      colour = "#00FF00"
-      speed = 0.01
-      radius = 100
-
-      [[slides.widgets.children.widgets]]
-      type = "animatedRect"
-      x = 0
-      y = 0
-      colour = "#FFFF00"
-      width = 100
-      height = 100
-
-  [[slides.widgets]]
+  
   type = "animatedCircleSectionLines"
   centerAngle = 225
   offsetAngle = 45
+
   x = 45
   y = 45
+
   radius = 40
-  thickness = 20
+  thickness = 5
   colour = "#FFFFFF"
-  speed = 4
   easeType = "In"
-  
+  speed = 2
+
     [[slides.widgets.children]]
     type = "animatedRect"
     x = 40
     y = 0
-    width = 1500
-    height = 20
-    speed = 0.25
+    width = 1745
+    height = 5
+    orientation = "right"
     colour = "#FFFFFF"
     easeType = "Out"
-    orientation = "Horizontal"
+    speed = 0.5
 
     [[slides.widgets.children]]
     type = "animatedRect"
     x = 0
     y = 40
-    width = 20
-    height = 500
-    speed = 0.25
+    width = 5
+    height = 905
     colour = "#FFFFFF"
     easeType = "Out"
-    orientation = "Vertical"
+    orientation = "down"
+    speed = 0.5
 
-[[slides]]
+  [[slides.widgets.children]]
+  
+  type = "animatedCircleSectionLines"
+  centerAngle = 135
+  offsetAngle = 45
+
+  x = 0
+  y = 905
+
+  radius = 40
+  thickness = 5
+  colour = "#FFFFFF"
+  easeType = "In"
+  speed = 2
 
   [[slides.widgets]]
 
-  type = "rect"
-  x = 111
-  y = 111
-  width = 200
-  height = 200
-  colour = "#FFFFFF"
+  type = "animatedCircleSectionLines"
+  centerAngle = 45
+  offsetAngle = 45
 
+  x = 1790
+  y = 950
+
+  radius = 40
+  thickness = 5
+  colour = "#FFFFFF"
+  easeType = "In"
+  speed = 2
+
+    [[slides.widgets.children]]
+  
+    type = "animatedCircleSectionLines"
+    centerAngle = 315
+    offsetAngle = 45
+
+    x = 0
+    y = -905
+
+    radius = 40
+    thickness = 5
+    colour = "#FFFFFF"
+    easeType = "InOut"
+    speed = 2
+  
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = -1705
+    y = 75
+    width = 1750
+    height = 5
+    colour = "#FFFFFF"
+    easeType = "Out"
+    orientation = "left"
+    speed = 0.5
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 75 
+    y = -865
+    width = 5
+    height = 905
+    colour = "#FFFFFF"
+    easeType = "Out"
+    orientation = "up"
+    speed = 0.5
+
+  [[slides.widgets]]
+  type = "animatedText"
+
+  colour = "#FFFFFF"
+  size = 100
+  x = 960
+  y = 540
+  contents = "Farenheit 451"
+
+  style = "body"
+
+  [[slides.widgets]]
+  type = "animatedText"
+
+  colour = "#AAAAAA"
+  size = 50
+  x = 960
+  y = 640
+  contents = "By Gavin D."
+
+  style = "body"
+
+[[slides ]
