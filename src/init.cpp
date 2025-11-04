@@ -5,7 +5,7 @@
 void init(Entity* root) {
   Text::loadFonts();
 
-  root->addChild(toml::parseSlideShow(toml::parse_file("slideshow.toml")));
+  root->addChild(toml::parseSlideShow(toml::parse_file("resources/slideshow.toml")));
 }
 
 void preRendering(Entity* root) {

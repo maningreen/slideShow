@@ -1,0 +1,359 @@
+#11111B
+#725AC1
+#8D86C9
+#CAC4CE
+#F7ECE1
+background = "#11111B"
+[[slides]]
+
+  [[slides.widgets]]
+  
+  type = "animatedCircleSectionLines"
+  centerAngle = 225
+  offsetAngle = 45
+
+  x = 45
+  y = 45
+
+  radius = 40
+  thickness = 5
+  colour = "#F7ECE1"
+  easeType = "In"
+  speed = 2
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 40
+    y = 0
+    width = 1745
+    height = 5
+    orientation = "right"
+    colour = "#F7ECE1"
+    easeType = "Out"
+    speed = 0.5
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 0
+    y = 40
+    width = 5
+    height = 905
+    colour = "#F7ECE1"
+    easeType = "Out"
+    orientation = "down"
+    speed = 0.5
+
+  [[slides.widgets.children]]
+  
+  type = "animatedCircleSectionLines"
+  centerAngle = 135
+  offsetAngle = 45
+
+  x = 0
+  y = 905
+
+  radius = 40
+  thickness = 5
+  colour = "#F7ECE1"
+  easeType = "InOut"
+  speed = 1
+
+  [[slides.widgets]]
+
+  type = "animatedCircleSectionLines"
+  centerAngle = 45
+  offsetAngle = 45
+
+  x = 1790
+  y = 950
+
+  radius = 40
+  thickness = 5
+  colour = "#F7ECE1"
+  easeType = "In"
+  speed = 2
+
+    [[slides.widgets.children]]
+  
+    type = "animatedCircleSectionLines"
+    centerAngle = 315
+    offsetAngle = 45
+
+    x = 0
+    y = -905
+
+    radius = 40
+    thickness = 5
+    colour = "#F7ECE1"
+    easeType = "InOut"
+    speed = 1
+  
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = -1705
+    y = 75
+    width = 1750
+    height = 5
+    colour = "#F7ECE1"
+    easeType = "Out"
+    orientation = "left"
+    speed = 0.5
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 75 
+    y = -865
+    width = 5
+    height = 905
+    colour = "#F7ECE1"
+    easeType = "Out"
+    orientation = "up"
+    speed = 0.5
+
+  [[slides.widgets]]
+  type = "text"
+
+  colour = "#F7ECE1"
+  size = 100
+  x = 960
+  y = 540
+  contents = "Farenheit 451"
+
+  style = "body"
+
+  [[slides.widgets]]
+  type = "text"
+
+  colour = "#CAC4CE"
+  size = 50
+  x = 960
+  y = 640
+  contents = "By Gavin D."
+
+  style = "body"
+
+[[slides]]
+
+  [[slides.widgets]]
+  type = "animatedText"
+  contents = "What do you do that makes you happy?"
+  size = 90
+  style = "body"
+  speed = 4
+  colour = "#F7ECE1"
+  x = 960
+  y = 540
+
+  [[slides.widgets.children]]
+  type = "animatedRect"
+  colour = "#725AC1"
+  x = -615
+  y = 20
+  width = 100
+  height = 10
+  orientation = "right"
+
+    [[slides.widgets.children]]
+    type = "animatedText"
+    colour = "#F7ECE1"
+    x = 0
+    y = 100
+    size = 50
+    easeType = "InOut"
+    speed = 0.50
+    contents = "What do you create that you enjoy?"
+
+      [[slides.widgets.children.children]]
+      type = "animatedRect"
+      colour = "#725AC1"
+      x = -320 
+      y = 0
+      width = 40
+      height = 0.2
+      orientation = "left"
+
+      [[slides.widgets.children.children]]
+      type = "animatedText"
+      colour = "#F7ECE1"
+      x = 0
+      y = -200
+      size = 75
+      easeType = "InOut"
+      speed = 0.50
+      contents = "Do you create anything?"
+
+  [[slides.widgets]]
+  type = "animatedCircle"
+  x = 0
+  y = 0
+  width = 1
+  colour = "#11111B"
+  speed = 0.1
+  radius = 1
+  height = 1
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 0
+    y = 0
+    width = 1920
+    height = 1920
+    colour = "#11111B"
+    speed = 0.4
+
+[[slides]]
+
+  [[slides.widgets]]
+  type = "animatedText"
+  contents = "all of this to say:"
+  colour = "#F7ECE1"
+  size = 40
+  x = 920
+  y = 200
+
+    [[slides.widgets.children]]
+    type = "animatedImage"
+    source = "./resources/brain.png"
+    x = -119.5
+    y = 100
+    scale = 1.5
+
+    [[slides.widgets.children]]
+    type = "animatedText"
+    x = 0
+    y = 700
+    size = 40
+    colour = "#FFFFFF"
+    contents = """
+    THIS IS NOT A JOKE GUYS 
+  THE GOVERNMENT IS TRYING TO
+   MAKE THE CITIZENS SHEEPLE
+        WAKE UP SHEEPLE
+    """
+
+  [[slides.widgets]]
+  type = "animatedCircle"
+  x = 0
+  y = 0
+  width = 1
+  colour = "#11111B"
+  speed = 0.5
+  radius = 1
+  height = 1
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 0
+    y = 0
+    width = 1920
+    height = 1920
+    colour = "#11111B"
+    speed = 0.4
+
+      [[slides.widgets.children.children]]
+      type = "animatedText"
+      x = 920
+      y = 150
+      size = 70
+      colour = "#F7ECE1"
+      contents = "What's Bradburry trying to say?"
+
+        [[slides.widgets.children.children]]
+        type = "animatedCircle"
+        x = 0
+        y = 0
+        radius = 1
+        colour = "#11111B"
+        speed = 0.3
+
+        [[slides.widgets.children.children.children]]
+        type = "animatedRect"
+        x = 192
+        width = 1536
+        y = 100
+        height = 100
+        colour = "#F7ECE1"
+        orientation = "left"
+
+
+### THEME STATEMENT
+[[slides]]
+
+  [[slides.widgets]]
+  type = "rect"
+  x = 192
+  width = 1536
+  y = 100
+  height = 100
+  colour = "#F7ECE1"
+
+  [[slides.widgets]]
+
+    type = "animatedRect"
+    x = 207
+    width = 1504.8
+    y = 110
+    height = 80
+    colour = "#11111B"
+    orientation = "right"
+
+
+      [[slides.widgets.children]]
+      type = "animatedText"
+      x = 768
+      y = 400
+      size = 70
+      contents = "How does the book support this theme?"
+      colour = "#F7ECE1"
+
+    [[slides.widgets]]
+
+    type = "text"
+    x = 975
+    y = 170
+    colour = "#F7ECE1"
+    size = 80
+    contents = "Without growth one can't be happy."
+
+#### ENDING SLIDE
+[[slides]]
+
+  [[slides.widgets]]
+  type = "animatedText"
+  x = 200
+  y = 50
+  size = 50
+  contents = "Ending notes"
+  colour = "#F7ECE1"
+
+  [[slides.widgets]]
+  type = "animatedText"
+  x = 960
+  y = 540
+  size = 25
+
+  speed = 0.3
+  contents = """
+This slideshow was made in a custom engine.
+If you want to see the source it's visible at https://github.com/maningreen/slideShow
+If you wish to clone the source, you can with the command `git clone https://github.com/maningreen/slideShow.git`
+This software is licensed under the MIT license, as such you can use this in a closed source project.
+sources for images can be found at ./resources/sources.md
+Thank you for your time and get off your phone, go fill your eyes with wonder,
+beauty isn't mass produced.
+I should've added better slide transitions.
+  """
+  colour = "#F7ECE1"
+
+  [[slides.widgets]]
+  type = "animatedText"
+  x = 500
+  y = 1000
+  size = 25
+
+  contents = """
+  No "generative AI" wrote any of the content in this presentation
+  frontend or backend
+  """
+  speed = 0.3
+  colour = "#F7ECE1"

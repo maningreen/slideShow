@@ -47,22 +47,22 @@ void Box::step(float delta) {
   }
   dimensions = Vector2Zero();
   entities[0]->process(delta);
-  entities[0]->position = position;
+  entities[0]->globalPos = position;
   dimensions += entities[0]->dimensions;
   for(int i = 1; i < entities.size(); i++) {
     entities[i]->process(delta);
     entities[i]->position = position;
     if(dir == Vertical) {
-      entities[i]->position.y = entities[i - 1]->dimensions.y + entities[i - 1]->position.y;
+      entities[i]->globalPos.y = entities[i - 1]->dimensions.y + entities[i - 1]->position.y;
 
       dimensions.y += entities[i]->dimensions.y;
       if(dimensions.x < entities[i]->dimensions.x)
         dimensions.x = entities[i]->dimensions.x;
     }
     else if (dir == Horizontal) {
-      dimensions.x += entities[i]->dimensions.x;
+      entities[i]->globalPos.x = entities[i - 1]->dimensions.x + entities[i - 1]->position.x;
 
-      entities[i]->position.x = entities[i - 1]->dimensions.x + entities[i - 1]->position.x;
+      dimensions.x += entities[i]->dimensions.x;
       if(dimensions.y < entities[i]->dimensions.y)
         dimensions.y = entities[i]->dimensions.y;
     }
@@ -101,7 +101,7 @@ Rect::Rect(Rectangle x, Color c) {
 }
 
 void Rect::render() {
-  DrawRectangle(globalPos.x, globalPos.y, dimensions.x, dimensions.y, colour);
+  DrawRectangleV(globalPos, dimensions, colour);
 }
 
 Spacer::Spacer(float a, float b, float c, float d) : Rect(a, b, c, d, TRANSPARENT) {}
@@ -162,8 +162,8 @@ void Text::loadFonts() {
 }
 
 Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Color c) {
-  dimensions = MeasureTextEx(fonts[y], x.c_str(), s, 2);
-  position = p - dimensions / (Vector2){2, 2};
+  dimensions = MeasureTextEx(fonts[y], x.c_str(), s, 2) + (Vector2){0, 30};
+  position = p;
   text = x;
   type = y;
   size = s;
@@ -171,7 +171,7 @@ Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Color c) {
 }
 
 Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems) {
-  position = p - MeasureTextEx(fonts[y], x.c_str(), s, 2) / (Vector2){2, 2};
+  position = p;
   text = x;
   type = y;
   size = s;
@@ -180,7 +180,7 @@ Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems) {
 }
 
 Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems, Color c) {
-  position = p - MeasureTextEx(fonts[y], x.c_str(), s, 2) / (Vector2){2, 2};
+  position = p;
   text = x;
   type = y;
   size = s;
@@ -191,5 +191,5 @@ Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems, Color
 Text::~Text() {}
 
 void Text::render() {
-  DrawTextEx(fonts[type], text.c_str(), globalPos, size, 2, col);
+  DrawTextEx(fonts[type], text.c_str(), globalPos - dimensions / (Vector2){2, 2}, size, 2, col);
 }

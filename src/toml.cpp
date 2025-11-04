@@ -322,8 +322,8 @@ std::optional<Text*> toml::parseText(toml::table table) {
   std::optional<float> sizeM = table["size"].value<float>();
   std::optional<float> xM = table["x"].value<float>();
   std::optional<float> yM = table["y"].value<float>();
-  std::optional<float> demsXM = table["dimensionsX"].value<float>();
-  std::optional<float> demsYM = table["dimensionsY"].value<float>();
+  std::optional<float> demsXM = table["width"].value<float>();
+  std::optional<float> demsYM = table["height"].value<float>();
   std::optional<std::string> type = table["fontType"].value<std::string>();
 
   if(!(colourM && contentsM && sizeM && xM && yM))
@@ -362,8 +362,8 @@ std::optional<AnimatedText*> toml::parseAnimatedText(toml::table table) {
   std::optional<float> sizeM = table["size"].value<float>();
   std::optional<float> xM = table["x"].value<float>();
   std::optional<float> yM = table["y"].value<float>();
-  std::optional<float> demsXM = table["dimensionsX"].value<float>();
-  std::optional<float> demsYM = table["dimensionsY"].value<float>();
+  std::optional<float> demsXM = table["width"].value<float>();
+  std::optional<float> demsYM = table["height"].value<float>();
   std::optional<std::string> type = table["fontType"].value<std::string>();
   float speed = table["speed"].value<float>().value_or(1);
   AnimatedWidget::easeType easeType = strToAnimation(table["easeType"].value_or("InOut")).value();
@@ -444,11 +444,18 @@ std::optional<AnimatedImageWidget*> toml::parseAnimatedImage(toml::table table) 
   Direction dir = strToDir(table["direction"].value_or("")).value_or(Up);
   AnimatedWidget::easeType type = strToAnimation(table["direction"].value_or("")).value_or(AnimatedWidget::InOut);
   AnimatedImageWidget* x = new AnimatedImageWidget(ImageWidget(sourceM.value(), {xM.value(), yM.value()}), type, dir);
+
   UnloadTexture(x->source);
-  Image image = LoadImage(sourceM.value().c_str());
-  x->source = LoadTextureFromImage(image);
-  UnloadImage(image);
+  x->source = LoadTexture(sourceM.value().c_str());
   x->entities = parseChildenThingy(table);
+
+  if(table["cropping"].is_table()) {
+    if(std::optional<Rectangle> cropped = parseRectangle(*table["cropping"].as_table()))
+      x->crop = cropped.value();
+  }
+
+  x->scale = table["scale"].value_or(1);
+
   return x;
 }
 

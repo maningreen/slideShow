@@ -7,10 +7,11 @@
 
 struct ImageWidget : Widget {
   Texture source;
-
   void render() override;
 
   Rectangle crop;
+  float scale;
+
 
   ImageWidget(Image source, Vector2 p);
   ImageWidget(std::string source, Vector2 p);

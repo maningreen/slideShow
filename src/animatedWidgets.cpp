@@ -47,14 +47,14 @@ void AnimatedRect::step(float delta) {
 }
 
 void AnimatedRect::render() {
-  if(progress >= 1)
-    for(int i = 0; i < entities.size(); i++)
-      entities[i]->render();
   float offsetX = dir == Left ? dimensions.x * (1 - animation.ease(progress)) : 1;
   float offsetY = dir == Up ? dimensions.y * (1 - animation.ease(progress)) : 1;
   float scaleX = dir == Left || dir == Right ? animation.ease(progress) : 1;
   float scaleY = dir == Down || dir == Up ? animation.ease(progress) : 1;
   DrawRectangle(globalPos.x + offsetX, globalPos.y + offsetY, dimensions.x * scaleX, dimensions.y * scaleY, colour);
+  if(progress >= 1)
+    for(int i = 0; i < entities.size(); i++)
+      entities[i]->render();
 }
 
 AnimatedSpacer::AnimatedSpacer(Spacer x, AnimatedWidget::easeType t, Direction d) : 
@@ -62,6 +62,22 @@ AnimatedSpacer::AnimatedSpacer(Spacer x, AnimatedWidget::easeType t, Direction d
 
 AnimatedSpacer::AnimatedSpacer(Rect x, AnimatedWidget::easeType t, Direction d) : 
   AnimatedRect(Rect(x.position, x.dimensions, TRANSPARENT), t, d), speed(1) {}
+
+void AnimatedSpacer::step(float delta) {
+  if(progress >= 1)
+    for(int i = 0; i < entities.size(); i++) {
+      entities[i]->globalPos = entities[i]->position + globalPos;
+      entities[i]->step(delta);
+    }
+  else
+    progress += delta * speed;
+}
+
+void AnimatedSpacer::render() {
+  if(progress >= 1)
+    for(int i = 0; i < entities.size(); i++)
+      entities[i]->render();
+}
 
 AnimatedCircle::AnimatedCircle(Circle x, AnimatedWidget::easeType t) : Circle(x) {
   animation = AnimatedWidget(t);
@@ -84,10 +100,10 @@ void AnimatedCircle::step(float delta) {
 }
 
 void AnimatedCircle::render() {
+  DrawCircleV(globalPos + (Vector2){radius, radius}, radius * animation.ease(progress), colour);
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++)
       entities[i]->render();
-  DrawCircleV(globalPos + (Vector2){radius, radius}, radius * animation.ease(progress), colour);
 }
 
 AnimatedCircleSection::AnimatedCircleSection(CircleSection x, AnimatedWidget::easeType t) : CircleSection(x) {
@@ -107,11 +123,11 @@ void AnimatedCircleSection::step(float delta) {
 }
 
 void AnimatedCircleSection::render() {
+  float scalar = animation.ease(progress);
+  DrawCircleSector(globalPos + (Vector2){radius, radius}, radius, RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, colour);
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++)
       entities[i]->render();
-  float scalar = animation.ease(progress);
-  DrawCircleSector(globalPos + (Vector2){radius, radius}, radius, RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, colour);
 }
 
 AnimatedCircleSectionLines::AnimatedCircleSectionLines(CircleSectionLines x, AnimatedWidget::easeType t) : CircleSectionLines(x) {
@@ -131,15 +147,16 @@ void AnimatedCircleSectionLines::step(float delta) {
 }
 
 void AnimatedCircleSectionLines::render() {
-  if(progress >= 1)
-    for(int i = 0; i < entities.size(); i++)
-      entities[i]->render();
   float scalar = animation.ease(progress);
   DrawCircleSector(globalPos + (Vector2){radius, radius}, radius, RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, colour);
   DrawCircleSector(globalPos + (Vector2){radius, radius}, (radius - thickness), RAD2DEG * (centerAngle - offset * scalar), RAD2DEG * (centerAngle + offset * scalar), 12, BACKGROUND);
+  if(progress >= 1)
+    for(int i = 0; i < entities.size(); i++)
+      entities[i]->render();
 }
 
 AnimatedText::AnimatedText(Text x, AnimatedWidget::easeType t) : Text(x) {
+  dimensions = MeasureTextEx(fonts[type], text.c_str(), size, 2) + (Vector2){0, 30};
   animation = AnimatedWidget(t);
   progress = 0;
   speed = 1;
@@ -156,13 +173,13 @@ void AnimatedText::step(float delta) {
 }
 
 void AnimatedText::render() {
-  if(progress >= 1)
-    for(int i = 0; i < entities.size(); i++)
-      entities[i]->render();
   float scalar = animation.ease(progress);
   unsigned index = floor(scalar * text.length());
   char old = text[index];
   text[index] = '\0';
-  DrawTextEx(fonts[type], text.c_str(), globalPos, size, 2, col);
+  DrawTextEx(fonts[type], text.c_str(), globalPos - dimensions / (Vector2){2, 2}, size, 2, col);
   text[index] = old;
+  if(progress >= 1)
+    for(int i = 0; i < entities.size(); i++)
+      entities[i]->render();
 }
