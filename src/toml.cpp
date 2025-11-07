@@ -443,7 +443,7 @@ std::optional<AnimatedImageWidget*> toml::parseAnimatedImage(toml::table table) 
   if(!(sourceM && xM && yM))
     return std::nullopt;
 
-  Direction dir = strToDir(table["direction"].value_or("")).value_or(Up);
+  Direction dir = strToDir(table["orientation"].value_or("")).value_or(Up);
   AnimatedWidget::easeType type = strToAnimation(table["direction"].value_or("")).value_or(AnimatedWidget::InOut);
   AnimatedImageWidget* x = new AnimatedImageWidget(ImageWidget(sourceM.value().c_str(), {xM.value(), yM.value()}), type, dir);
 

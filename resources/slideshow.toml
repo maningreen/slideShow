@@ -25,7 +25,7 @@ background = "#11111B"
     type = "animatedRect"
     x = 40
     y = 0
-    width = 1745
+    width = 1745 
     height = 5
     orientation = "right"
     colour = "#F7ECE1"
@@ -171,16 +171,25 @@ background = "#11111B"
       width = 40
       height = 0.2
       orientation = "left"
-
+      
       [[slides.widgets.children.children]]
-      type = "animatedText"
-      colour = "#F7ECE1"
+      type = "animatedSpacer"
       x = 0
-      y = -200
-      size = 75
-      easeType = "InOut"
-      speed = 0.50
-      contents = "Do you create anything?"
+      y = 0
+      width = 0
+      height = 0
+
+      speed = 0.33
+
+        [[slides.widgets.children.children.children]]
+        type = "animatedText"
+        colour = "#F7ECE1"
+        x = 0
+        y = -200
+        size = 75
+        easeType = "InOut"
+        speed = 0.50
+        contents = "Do you create anything?"
 
   [[slides.widgets]]
   type = "animatedCircle"
@@ -190,7 +199,7 @@ background = "#11111B"
   colour = "#11111B"
   speed = 0.1
   radius = 1
-  height = 1
+  height = 0.1
 
     [[slides.widgets.children]]
     type = "animatedRect"
@@ -200,6 +209,21 @@ background = "#11111B"
     height = 1920
     colour = "#11111B"
     speed = 0.4
+
+      [[slides.widgets.children.children]]
+      type = "animatedImage"
+      source = "./resources/flame.jpg"
+      x = 620
+      y = 240
+      speed = 0.4
+
+      [[slides.widgets.children.children]]
+      type = "animatedImage"
+      source = "./resources/StackOfBooks.png"
+      x = 1320
+      y = 580
+      scale = 1
+      speed = 0.4
 
 [[slides]]
 
@@ -214,7 +238,7 @@ background = "#11111B"
     [[slides.widgets.children]]
     type = "animatedImage"
     source = "./resources/brain.png"
-    x = -119.5
+    x = -238
     y = 100
     scale = 1.5
 
@@ -223,7 +247,7 @@ background = "#11111B"
     x = 0
     y = 700
     size = 40
-    colour = "#FFFFFF"
+    colour = "#F7ECE1"
     contents = """
     THIS IS NOT A JOKE GUYS 
   THE GOVERNMENT IS TRYING TO
@@ -315,6 +339,225 @@ background = "#11111B"
     size = 80
     contents = "Without growth one can't be happy."
 
+### a bunch of quotes
+[[slides]]
+
+  [[slides.widgets]]
+  type = "animatedRect"
+  x = 1700
+  y = 100
+  width = 10
+  height = 450
+  colour = "#F7ECE1"
+  easeType = "In"
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 0
+    y = 450
+    width = 10
+    height = 450
+    colour = "#F7ECE1"
+    easeType = "Out"
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = -1000 
+    y = 450
+    width = 1000
+    height = 10
+    colour = "#F7ECE1"
+    orientation = "left"
+    easeType = "In"
+
+      [[slides.widgets.children.children]]
+      type = "animatedRect"
+      x = 0 
+      y = 0
+      width = 10
+      height = 400
+      colour = "#F7ECE1"
+      orientation = "down"
+      easeType = "Out"
+
+      [[slides.widgets.children.children]]
+      type = "animatedRect"
+      x = -450 
+      y = 0
+      width = 450
+      height = 10
+      colour = "#F7ECE1"
+      orientation = "left"
+      easeType = "Out"
+
+  [[slides.widgets]]
+  type = "animatedText"
+  # p 58 "beatty's rant"
+  size = 30
+  colour = "#F7ECE1"
+  x = 870
+  y = 270
+  contents = """
+"Give the people contests they win by remembering the words to more 
+popular songs or names of state capitals or how much corn Iowa grew last year. 
+Cram them full of noncombustible data, chock them so damned full of 'facts' they feel stuffed, 
+but absolutely 'brilliant' with information. 
+Then they'll feel they're thinking, 
+they'll get a sense of motion without ever actually moving. 
+And they'll be happy, 
+because facts of that sort don't change. 
+Don't give them any slippery stuff 
+like philosophy or sociology to tie things up with. 
+That way lies meloncholy." (58)
+  """ 
+
+    [[slides.widgets.children]]
+    type = "animatedText"
+    contents = """
+    this reminds me about y'know
+    of like... a lot of content running quickly
+    of which can have "information"
+    but not really information that means anything
+    Wow that's some conveniently placed whitespace
+    """
+    x = 300
+    y = 450
+    size = 30
+    speed = 0.3
+    colour = "#F7ECE1"
+
+      [[slides.widgets.children.children]]
+      type = "animatedImage"
+      source = "./resources/instagram.png"
+      x = -1000
+      y = -100 
+      scale = 0.1
+      speed = 0.15
+  
+  [[slides.widgets]]
+  type = "animatedCircle"
+  x = 0
+  y = 0
+  radius = 1
+  colour = "#11111B"
+  speed = 0.008
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 0
+    y = 0
+    width = 1920
+    height = 1920
+    colour = "#11111B"
+    speed = 0.4
+
+[[slides]]
+
+  [[slides.widgets]]
+  type = "animatedRect"
+  x = 50
+  y = 100
+  width = 10
+  height = 300
+  colour = "#F7ECE1"
+  easeType = "In"
+
+    [[slides.widgets.children]]
+    type = "animatedText"
+    contents = """
+    'I hate a Roman named Status Quo!' he said to me. 
+    'Stuff your eyes full of wonder,' he said, 
+    '... See the world. It's more fantastic than any dream made or paid for in factories... 
+    [otherwise you'll] be related to the great sloth which hangs upside down in a tree all day every day, 
+    sleeping its life way, to hell with that,' he said, 
+    'shake the tree and knock the great sloth down on his ass.'
+    (150)
+    """
+    size = 30
+    colour = "#F7ECE1"
+    x = 900
+    y = 160
+
+    [[slides.widgets.children]]
+    type = "animatedRect"
+    x = 0
+    y = 300
+    width = 300
+    height = 10
+    easeType = "Out"
+    orientation = "right"
+    colour = "#F7ECE1"
+
+
+      [[slides.widgets.children.children]]
+      type = "box"
+      orientation = "horizontal"
+      x = 300
+      y = 0
+
+        [[slides.widgets.children.children.widgets]]
+        type = "animatedRect"
+        x = 300
+        y = 0
+        width = 10
+        height = 300
+        easeType = "InOut"
+        orientation = "down"
+        colour = "#F7ECE1"
+
+        [[slides.widgets.children.children.widgets]]
+        type = "animatedSpacer"
+        x = 0
+        y = 0
+        width = 100
+        height = 300
+        orientation = "right"
+
+        [[slides.widgets.children.children.widgets]]
+        type = "animatedImage"
+        x = 0
+        y = 600
+        easeType = "InOut"
+        orientation = "right"
+        source = "./resources/sloth.jpg"
+        colour = "#F7ECE1"
+
+[[slides]]
+
+  [[slides.widgets]]
+  type = "animatedText"
+  contents = """
+  Can you dance faster than the White Clown, 
+  shout louder than 'Mr. Gimmick' 
+  and the parlor 'families'? 
+  If you can, you'll win your way, Montag. 
+  In any event, you're a fool. 
+  People are having fun.
+  (83)
+  """
+  x = 920
+  y = 540
+  size = 30
+  colour = "#F7ECE1"
+
+    [[slides.widgets.children]]
+    type = "animatedText"
+    x = 0
+    y = 300
+    speed = 0.3
+    size = 25
+    contents = "They're having fun, but they aren't happy"
+    colour = "#CAC4CE"
+
+  [[slides.widgets]]
+  type = "animatedRect"
+  x = 540
+  y = 400
+  width = 10
+  height = 220
+  colour = "#8D86C9"
+  speed = 2
+
 #### ENDING SLIDE
 [[slides]]
 
@@ -334,14 +577,15 @@ background = "#11111B"
 
   speed = 0.3
   contents = """
-This slideshow was made in a custom engine.
-If you want to see the source it's visible at https://github.com/maningreen/slideShow
-If you wish to clone the source, you can with the command `git clone https://github.com/maningreen/slideShow.git`
-This software is licensed under the MIT license, as such you can use this in a closed source project.
-sources for images can be found at ./resources/sources.md
-Thank you for your time and get off your phone, go fill your eyes with wonder,
-beauty isn't mass produced.
-I should've added better slide transitions.
+  This slideshow was made in a custom engine.
+  If you want to see the source it's visible at https://github.com/maningreen/slideShow
+  If you wish to clone the source, you can with the command `git clone https://github.com/maningreen/slideShow.git`
+  This software is licensed under the MIT license, as such you can use this in a closed source project.
+  sources for images can be found at ./resources/sources.md
+  All the software used to create this are free and open source.
+  Thank you for your time and get off your phone, go fill your eyes with wonder,
+  beauty isn't mass produced.
+  I should've added better slide transitions.
   """
   colour = "#F7ECE1"
 
