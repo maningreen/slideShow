@@ -27,7 +27,7 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /tmp/tmpmu54bm7c.js
+// include: /tmp/tmps3n3trwk.js
 
   Module['expectedDataFileDownloads'] ??= 0;
   Module['expectedDataFileDownloads']++;
@@ -208,21 +208,21 @@ Module['FS_createPath']("/", "resources", true, true);
 
   })();
 
-// end include: /tmp/tmpmu54bm7c.js
-// include: /tmp/tmpa91eoesm.js
+// end include: /tmp/tmps3n3trwk.js
+// include: /tmp/tmp6bfp838s.js
 
     // All the pre-js content up to here must remain later on, we need to run
     // it.
     if ((typeof ENVIRONMENT_IS_WASM_WORKER != 'undefined' && ENVIRONMENT_IS_WASM_WORKER) || (typeof ENVIRONMENT_IS_PTHREAD != 'undefined' && ENVIRONMENT_IS_PTHREAD) || (typeof ENVIRONMENT_IS_AUDIO_WORKLET != 'undefined' && ENVIRONMENT_IS_AUDIO_WORKLET)) Module['preRun'] = [];
     var necessaryPreJSTasks = Module['preRun'].slice();
-  // end include: /tmp/tmpa91eoesm.js
-// include: /tmp/tmpc_xcbvpq.js
+  // end include: /tmp/tmp6bfp838s.js
+// include: /tmp/tmpfvq7z0lq.js
 
     if (!Module['preRun']) throw 'Module.preRun should exist because file support used it; did a pre-js delete it?';
     necessaryPreJSTasks.forEach((task) => {
       if (Module['preRun'].indexOf(task) < 0) throw 'All preRun tasks that exist before user pre-js code should remain after; did you replace Module or modify Module.preRun?';
     });
-  // end include: /tmp/tmpc_xcbvpq.js
+  // end include: /tmp/tmpfvq7z0lq.js
 
 
 var arguments_ = [];
@@ -4267,6 +4267,10 @@ async function createWasm() {
       assert(ASM_CONSTS.hasOwnProperty(code), `No EM_ASM constant found at address ${code}.  The loaded WebAssembly file is likely out of sync with the generated JavaScript.`);
       return ASM_CONSTS[code](...args);
     };
+  var _emscripten_asm_const_double = (code, sigPtr, argbuf) => {
+      return runEmAsmFunction(code, sigPtr, argbuf);
+    };
+
   var _emscripten_asm_const_int = (code, sigPtr, argbuf) => {
       return runEmAsmFunction(code, sigPtr, argbuf);
     };
@@ -7898,6 +7902,35 @@ async function createWasm() {
       return -1;
     };
 
+  
+  
+  
+  var registerFocusEventCallback = (target, userData, useCapture, callbackfunc, eventTypeId, eventTypeString, targetThread) => {
+      JSEvents.focusEvent ||= _malloc(256);
+  
+      var focusEventHandlerFunc = (e = event) => {
+        var nodeName = JSEvents.getNodeNameForTarget(e.target);
+        var id = e.target.id ? e.target.id : '';
+  
+        var focusEvent = JSEvents.focusEvent;
+        stringToUTF8(nodeName, focusEvent + 0, 128);
+        stringToUTF8(id, focusEvent + 128, 128);
+  
+        if (((a1, a2, a3) => dynCall_iiii(callbackfunc, a1, a2, a3))(eventTypeId, focusEvent, userData)) e.preventDefault();
+      };
+  
+      var eventHandler = {
+        target: findEventTarget(target),
+        eventTypeString,
+        callbackfunc,
+        handlerFunc: focusEventHandlerFunc,
+        useCapture
+      };
+      return JSEvents.registerOrRemoveHandler(eventHandler);
+    };
+  var _emscripten_set_blur_callback_on_thread = (target, userData, useCapture, callbackfunc, targetThread) =>
+      registerFocusEventCallback(target, userData, useCapture, callbackfunc, 12, "blur", targetThread);
+
   var findCanvasEventTarget = findEventTarget;
   var _emscripten_set_canvas_element_size = (target, width, height) => {
       var canvas = findCanvasEventTarget(target);
@@ -7957,6 +7990,9 @@ async function createWasm() {
     };
   var _emscripten_set_click_callback_on_thread = (target, userData, useCapture, callbackfunc, targetThread) =>
       registerMouseEventCallback(target, userData, useCapture, callbackfunc, 4, "click", targetThread);
+
+  var _emscripten_set_focus_callback_on_thread = (target, userData, useCapture, callbackfunc, targetThread) =>
+      registerFocusEventCallback(target, userData, useCapture, callbackfunc, 13, "focus", targetThread);
 
   
   
@@ -8236,6 +8272,45 @@ async function createWasm() {
 
   var _emscripten_set_touchstart_callback_on_thread = (target, userData, useCapture, callbackfunc, targetThread) =>
       registerTouchEventCallback(target, userData, useCapture, callbackfunc, 22, "touchstart", targetThread);
+
+  
+  var fillVisibilityChangeEventData = (eventStruct) => {
+      var visibilityStates = [ "hidden", "visible", "prerender", "unloaded" ];
+      var visibilityState = visibilityStates.indexOf(document.visibilityState);
+  
+      // Assigning a boolean to HEAP32 with expected type coercion.
+      /** @suppress{checkTypes} */
+      HEAP8[eventStruct] = document.hidden;
+      HEAP32[(((eventStruct)+(4))>>2)] = visibilityState;
+    };
+  
+  var registerVisibilityChangeEventCallback = (target, userData, useCapture, callbackfunc, eventTypeId, eventTypeString, targetThread) => {
+      JSEvents.visibilityChangeEvent ||= _malloc(8);
+  
+      var visibilityChangeEventHandlerFunc = (e = event) => {
+        var visibilityChangeEvent = JSEvents.visibilityChangeEvent;
+  
+        fillVisibilityChangeEventData(visibilityChangeEvent);
+  
+        if (((a1, a2, a3) => dynCall_iiii(callbackfunc, a1, a2, a3))(eventTypeId, visibilityChangeEvent, userData)) e.preventDefault();
+      };
+  
+      var eventHandler = {
+        target,
+        eventTypeString,
+        callbackfunc,
+        handlerFunc: visibilityChangeEventHandlerFunc,
+        useCapture
+      };
+      return JSEvents.registerOrRemoveHandler(eventHandler);
+    };
+  
+  var _emscripten_set_visibilitychange_callback_on_thread = (userData, useCapture, callbackfunc, targetThread) => {
+    if (!specialHTMLTargets[1]) {
+      return -4;
+    }
+      return registerVisibilityChangeEventCallback(specialHTMLTargets[1], userData, useCapture, callbackfunc, 21, "visibilitychange", targetThread);
+    };
 
   var handleException = (e) => {
       // Certain exception types we do not treat as errors since they are used for
@@ -10965,7 +11040,6 @@ if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
   'writeArrayToMemory',
   'registerKeyEventCallback',
   'registerWheelEventCallback',
-  'registerFocusEventCallback',
   'fillDeviceOrientationEventData',
   'registerDeviceOrientationEventCallback',
   'fillDeviceMotionEventData',
@@ -10983,8 +11057,6 @@ if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
   'doRequestFullscreen',
   'registerPointerlockErrorEventCallback',
   'requestPointerLock',
-  'fillVisibilityChangeEventData',
-  'registerVisibilityChangeEventCallback',
   'registerBeforeUnloadEventCallback',
   'fillBatteryEventData',
   'registerBatteryEventCallback',
@@ -11109,12 +11181,15 @@ missingLibrarySymbols.forEach(missingLibrarySymbol)
   'fillMouseEventData',
   'registerMouseEventCallback',
   'registerUiEventCallback',
+  'registerFocusEventCallback',
   'fillFullscreenChangeEventData',
   'registerFullscreenChangeEventCallback',
   'currentFullscreenStrategy',
   'restoreOldWindowedStyle',
   'fillPointerlockChangeEventData',
   'registerPointerlockChangeEventCallback',
+  'fillVisibilityChangeEventData',
+  'registerVisibilityChangeEventCallback',
   'registerTouchEventCallback',
   'fillGamepadEventData',
   'registerGamepadEventCallback',
@@ -11325,54 +11400,56 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('fetchSettings');
 }
 var ASM_CONSTS = {
-  133344: () => { if (document.fullscreenElement) return 1; },  
- 133390: () => { return document.getElementById('canvas').width; },  
- 133442: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 133510: () => { document.exitFullscreen(); },  
- 133537: () => { setTimeout(function() { Module.requestFullscreen(false, false); }, 100); },  
- 133610: () => { if (document.fullscreenElement) return 1; },  
- 133656: () => { return document.getElementById('canvas').width; },  
- 133708: () => { return screen.width; },  
- 133733: () => { document.exitFullscreen(); },  
- 133760: () => { setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { canvas.style.width="unset"; }, 100); }, 100); },  
- 133893: () => { return window.innerWidth; },  
- 133919: () => { return window.innerHeight; },  
- 133946: () => { if (document.fullscreenElement) return 1; },  
- 133992: () => { return document.getElementById('canvas').width; },  
- 134044: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 134112: () => { if (document.fullscreenElement) return 1; },  
- 134158: () => { return document.getElementById('canvas').width; },  
- 134210: () => { return screen.width; },  
- 134235: () => { return window.innerWidth; },  
- 134261: () => { return window.innerHeight; },  
- 134288: () => { if (document.fullscreenElement) return 1; },  
- 134334: () => { return document.getElementById('canvas').width; },  
- 134386: () => { return screen.width; },  
- 134411: () => { document.exitFullscreen(); },  
- 134438: () => { if (document.fullscreenElement) return 1; },  
- 134484: () => { return document.getElementById('canvas').width; },  
- 134536: () => { return parseInt(document.getElementById('canvas').style.width); },  
- 134604: () => { document.exitFullscreen(); },  
- 134631: ($0) => { document.getElementById('canvas').style.opacity = $0; },  
- 134689: () => { return screen.width; },  
- 134714: () => { return screen.height; },  
- 134740: () => { return window.screenX; },  
- 134767: () => { return window.screenY; },  
- 134794: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
- 134847: ($0) => { document.getElementById("canvas").style.cursor = UTF8ToString($0); },  
- 134918: () => { document.getElementById('canvas').style.cursor = 'none'; },  
- 134975: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
- 135231: ($0) => { document.getElementById('canvas').style.cursor = UTF8ToString($0); },  
- 135302: () => { if (document.fullscreenElement) return 1; },  
- 135348: () => { return window.innerWidth; },  
- 135374: () => { return window.innerHeight; },  
- 135401: () => { if (document.pointerLockElement) return 1; }
+  133056: () => { if (document.fullscreenElement) return 1; },  
+ 133102: () => { return Module.canvas.width; },  
+ 133134: () => { return parseInt(Module.canvas.style.width); },  
+ 133182: () => { document.exitFullscreen(); },  
+ 133209: () => { setTimeout(function() { Module.requestFullscreen(false, false); }, 100); },  
+ 133282: () => { if (document.fullscreenElement) return 1; },  
+ 133328: () => { return Module.canvas.width; },  
+ 133360: () => { return screen.width; },  
+ 133385: () => { document.exitFullscreen(); },  
+ 133412: () => { setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { canvas.style.width="unset"; }, 100); }, 100); },  
+ 133545: () => { return window.innerWidth; },  
+ 133571: () => { return window.innerHeight; },  
+ 133598: () => { if (document.fullscreenElement) return 1; },  
+ 133644: () => { return Module.canvas.width; },  
+ 133676: () => { return parseInt(Module.canvas.style.width); },  
+ 133724: () => { if (document.fullscreenElement) return 1; },  
+ 133770: () => { return Module.canvas.width; },  
+ 133802: () => { return screen.width; },  
+ 133827: () => { return window.innerWidth; },  
+ 133853: () => { return window.innerHeight; },  
+ 133880: () => { if (document.fullscreenElement) return 1; },  
+ 133926: () => { return Module.canvas.width; },  
+ 133958: () => { return screen.width; },  
+ 133983: () => { document.exitFullscreen(); },  
+ 134010: () => { if (document.fullscreenElement) return 1; },  
+ 134056: () => { return Module.canvas.width; },  
+ 134088: () => { return parseInt(Module.canvas.style.width); },  
+ 134136: () => { document.exitFullscreen(); },  
+ 134163: ($0) => { Module.canvas.style.opacity = $0; },  
+ 134201: () => { return screen.width; },  
+ 134226: () => { return screen.height; },  
+ 134252: () => { return window.screenX; },  
+ 134279: () => { return window.screenY; },  
+ 134306: () => { return window.devicePixelRatio; },  
+ 134342: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
+ 134395: ($0) => { Module.canvas.style.cursor = UTF8ToString($0); },  
+ 134446: () => { Module.canvas.style.cursor = 'none'; },  
+ 134483: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
+ 134739: ($0) => { Module.canvas.style.cursor = UTF8ToString($0); },  
+ 134790: () => { if (document.pointerLockElement) return 1; },  
+ 134837: () => { if (document.fullscreenElement) return 1; },  
+ 134883: () => { return window.innerWidth; },  
+ 134909: () => { return window.innerHeight; }
 };
+function GetCanvasIdJs() { var canvasId = "#" + Module.canvas.id; var lengthBytes = lengthBytesUTF8(canvasId) + 1; var stringOnWasmHeap = _malloc(lengthBytes); stringToUTF8(canvasId, stringOnWasmHeap, lengthBytes); return stringOnWasmHeap; }
 
 // Imports from the Wasm binary.
 var _main = Module['_main'] = makeInvalidEarlyAccess('_main');
-var _malloc = makeInvalidEarlyAccess('_malloc');
 var _free = makeInvalidEarlyAccess('_free');
+var _malloc = makeInvalidEarlyAccess('_malloc');
 var _fflush = makeInvalidEarlyAccess('_fflush');
 var _emscripten_stack_get_end = makeInvalidEarlyAccess('_emscripten_stack_get_end');
 var _emscripten_stack_get_base = makeInvalidEarlyAccess('_emscripten_stack_get_base');
@@ -11394,8 +11471,8 @@ var dynCall_viff = makeInvalidEarlyAccess('dynCall_viff');
 var dynCall_viiiii = makeInvalidEarlyAccess('dynCall_viiiii');
 var dynCall_viiii = makeInvalidEarlyAccess('dynCall_viiii');
 var dynCall_vidd = makeInvalidEarlyAccess('dynCall_vidd');
-var dynCall_viiiiii = makeInvalidEarlyAccess('dynCall_viiiiii');
 var dynCall_iiiiii = makeInvalidEarlyAccess('dynCall_iiiiii');
+var dynCall_viiiiii = makeInvalidEarlyAccess('dynCall_viiiiii');
 var dynCall_vffff = makeInvalidEarlyAccess('dynCall_vffff');
 var dynCall_vf = makeInvalidEarlyAccess('dynCall_vf');
 var dynCall_viiiiiiii = makeInvalidEarlyAccess('dynCall_viiiiiiii');
@@ -11429,8 +11506,8 @@ var _asyncify_stop_rewind = makeInvalidEarlyAccess('_asyncify_stop_rewind');
 
 function assignWasmExports(wasmExports) {
   Module['_main'] = _main = createExportWrapper('main', 2);
-  _malloc = createExportWrapper('malloc', 1);
   _free = createExportWrapper('free', 1);
+  _malloc = createExportWrapper('malloc', 1);
   _fflush = createExportWrapper('fflush', 1);
   _emscripten_stack_get_end = wasmExports['emscripten_stack_get_end'];
   _emscripten_stack_get_base = wasmExports['emscripten_stack_get_base'];
@@ -11452,8 +11529,8 @@ function assignWasmExports(wasmExports) {
   dynCalls['viiiii'] = dynCall_viiiii = createExportWrapper('dynCall_viiiii', 6);
   dynCalls['viiii'] = dynCall_viiii = createExportWrapper('dynCall_viiii', 5);
   dynCalls['vidd'] = dynCall_vidd = createExportWrapper('dynCall_vidd', 4);
-  dynCalls['viiiiii'] = dynCall_viiiiii = createExportWrapper('dynCall_viiiiii', 7);
   dynCalls['iiiiii'] = dynCall_iiiiii = createExportWrapper('dynCall_iiiiii', 6);
+  dynCalls['viiiiii'] = dynCall_viiiiii = createExportWrapper('dynCall_viiiiii', 7);
   dynCalls['vffff'] = dynCall_vffff = createExportWrapper('dynCall_vffff', 5);
   dynCalls['vf'] = dynCall_vf = createExportWrapper('dynCall_vf', 2);
   dynCalls['viiiiiiii'] = dynCall_viiiiiiii = createExportWrapper('dynCall_viiiiiiii', 9);
@@ -11487,6 +11564,8 @@ function assignWasmExports(wasmExports) {
 }
 var wasmImports = {
   /** @export */
+  GetCanvasIdJs,
+  /** @export */
   __assert_fail: ___assert_fail,
   /** @export */
   __cxa_throw: ___cxa_throw,
@@ -11506,6 +11585,8 @@ var wasmImports = {
   _tzset_js: __tzset_js,
   /** @export */
   clock_time_get: _clock_time_get,
+  /** @export */
+  emscripten_asm_const_double: _emscripten_asm_const_double,
   /** @export */
   emscripten_asm_const_int: _emscripten_asm_const_int,
   /** @export */
@@ -12079,9 +12160,13 @@ var wasmImports = {
   /** @export */
   emscripten_sample_gamepad_data: _emscripten_sample_gamepad_data,
   /** @export */
+  emscripten_set_blur_callback_on_thread: _emscripten_set_blur_callback_on_thread,
+  /** @export */
   emscripten_set_canvas_element_size: _emscripten_set_canvas_element_size,
   /** @export */
   emscripten_set_click_callback_on_thread: _emscripten_set_click_callback_on_thread,
+  /** @export */
+  emscripten_set_focus_callback_on_thread: _emscripten_set_focus_callback_on_thread,
   /** @export */
   emscripten_set_fullscreenchange_callback_on_thread: _emscripten_set_fullscreenchange_callback_on_thread,
   /** @export */
@@ -12102,6 +12187,8 @@ var wasmImports = {
   emscripten_set_touchmove_callback_on_thread: _emscripten_set_touchmove_callback_on_thread,
   /** @export */
   emscripten_set_touchstart_callback_on_thread: _emscripten_set_touchstart_callback_on_thread,
+  /** @export */
+  emscripten_set_visibilitychange_callback_on_thread: _emscripten_set_visibilitychange_callback_on_thread,
   /** @export */
   emscripten_set_window_title: _emscripten_set_window_title,
   /** @export */
