@@ -16,5 +16,6 @@ in pkgs.mkShell {
       # make
       gnumake
       gcc # gcc
+      emscripten # for building on the web
     ] ++ raylibPackages;
   }

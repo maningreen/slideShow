@@ -47,20 +47,21 @@ void Box::step(float delta) {
   }
   dimensions = Vector2Zero();
   entities[0]->process(delta);
-  entities[0]->globalPos = position;
+  entities[0]->globalPos = this->globalPos;
   dimensions += entities[0]->dimensions;
   for(int i = 1; i < entities.size(); i++) {
     entities[i]->process(delta);
-    entities[i]->position = position;
     if(dir == Vertical) {
-      entities[i]->globalPos.y = entities[i - 1]->dimensions.y + entities[i - 1]->position.y;
+      entities[i]->globalPos.x = globalPos.x;
+      entities[i]->globalPos.y = entities[i - 1]->dimensions.y + entities[i - 1]->globalPos.y;
 
       dimensions.y += entities[i]->dimensions.y;
       if(dimensions.x < entities[i]->dimensions.x)
         dimensions.x = entities[i]->dimensions.x;
     }
     else if (dir == Horizontal) {
-      entities[i]->globalPos.x = entities[i - 1]->dimensions.x + entities[i - 1]->position.x;
+      entities[i]->globalPos.y = globalPos.y;
+      entities[i]->globalPos.x = entities[i - 1]->dimensions.x + entities[i - 1]->globalPos.x;
 
       dimensions.x += entities[i]->dimensions.x;
       if(dimensions.y < entities[i]->dimensions.y)

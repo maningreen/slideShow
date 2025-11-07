@@ -23,6 +23,7 @@ struct AnimatedImageWidget : ImageWidget {
   AnimatedWidget animation;
   float progress;
   Direction dir;
+  float speed;
 
   void step(float delta) override;
   void render() override;

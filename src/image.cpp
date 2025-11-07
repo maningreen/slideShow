@@ -10,6 +10,12 @@ ImageWidget::ImageWidget(Image s, Vector2 p) {
     .x = (float)source.width,
     .y = (float)source.height
   };
+  crop = {
+    0,
+    0,
+    0,
+    0
+  };
   scale = 1;
 }
 
@@ -20,6 +26,12 @@ ImageWidget::ImageWidget(std::string s, Vector2 p) {
     .x = (float)source.width,
     .y = (float)source.height
   };
+  crop = {
+    0,
+    0,
+    0,
+    0,
+  };
   scale = 1;
 }
 
@@ -29,6 +41,12 @@ ImageWidget::ImageWidget(char* s, Vector2 p) {
   dimensions = {
     .x = (float)source.width,
     .y = (float)source.height
+  };
+  crop = {
+    0,
+    0,
+    0,
+    0
   };
   scale = 1;
 }
@@ -60,16 +78,30 @@ AnimatedImageWidget::AnimatedImageWidget(ImageWidget base, AnimatedWidget::easeT
     .y = (float)source.height
   };
   scale = 1;
+  speed = 1;
+  crop = {
+    0,
+    0,
+    0,
+    0
+  };
 }
 
 AnimatedImageWidget::AnimatedImageWidget(ImageWidget base, AnimatedWidget::easeType type, Direction d) : ImageWidget(base) {
   dir = d;
   animation = AnimatedWidget(type);
   progress = 0;
+  speed = 1;
   scale = 1;
   dimensions = {
     .x = (float)source.width,
     .y = (float)source.height
+  };
+  crop = {
+    0,
+    0,
+    0,
+    0,
   };
 }
 
@@ -82,7 +114,7 @@ void AnimatedImageWidget::step(float delta) {
     for(int i = 0; i < entities.size(); i++)
       entities[i]->process(delta);
   else
-    progress += delta;
+    progress += delta * speed;
 }
 void AnimatedImageWidget::render() {
   if(progress >= 1)

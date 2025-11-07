@@ -430,6 +430,8 @@ std::optional<ImageWidget*> toml::parseImage(toml::table table) {
       x->crop = cropped.value();
   }
 
+  x->scale = table["scale"].value_or(1);
+
   return x;
 }
 
@@ -443,18 +445,19 @@ std::optional<AnimatedImageWidget*> toml::parseAnimatedImage(toml::table table) 
 
   Direction dir = strToDir(table["direction"].value_or("")).value_or(Up);
   AnimatedWidget::easeType type = strToAnimation(table["direction"].value_or("")).value_or(AnimatedWidget::InOut);
-  AnimatedImageWidget* x = new AnimatedImageWidget(ImageWidget(sourceM.value(), {xM.value(), yM.value()}), type, dir);
+  AnimatedImageWidget* x = new AnimatedImageWidget(ImageWidget(sourceM.value().c_str(), {xM.value(), yM.value()}), type, dir);
 
   UnloadTexture(x->source);
   x->source = LoadTexture(sourceM.value().c_str());
   x->entities = parseChildenThingy(table);
 
-  if(table["cropping"].is_table()) {
+  if(table["cropping"].is_table())
     if(std::optional<Rectangle> cropped = parseRectangle(*table["cropping"].as_table()))
       x->crop = cropped.value();
-  }
 
-  x->scale = table["scale"].value_or(1);
+  if(std::optional<float> scale = table["scale"].value<float>()) x->scale = scale.value();
+
+  if(std::optional<float> speed = table["speed"].value<float>()) x->speed = speed.value();
 
   return x;
 }

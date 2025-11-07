@@ -58,10 +58,14 @@ void AnimatedRect::render() {
 }
 
 AnimatedSpacer::AnimatedSpacer(Spacer x, AnimatedWidget::easeType t, Direction d) : 
-  AnimatedRect(Rect(x.position, x.dimensions, TRANSPARENT), t, d), speed(1) {}
+  AnimatedRect(Rect(x.position, x.dimensions, TRANSPARENT), t, d), speed(1) {
+    targetDems = dimensions;
+  }
 
 AnimatedSpacer::AnimatedSpacer(Rect x, AnimatedWidget::easeType t, Direction d) : 
-  AnimatedRect(Rect(x.position, x.dimensions, TRANSPARENT), t, d), speed(1) {}
+  AnimatedRect(Rect(x.position, dimensions, TRANSPARENT), t, d), speed(1) {
+    targetDems = dimensions;
+  }
 
 void AnimatedSpacer::step(float delta) {
   if(progress >= 1)
@@ -71,6 +75,11 @@ void AnimatedSpacer::step(float delta) {
     }
   else
     progress += delta * speed;
+  {
+    float scaleX = dir == Up || dir == Down ? 1 : animation.ease(progress);
+    float scaleY = dir == Left || dir == Right ? 1 : animation.ease(progress);
+    dimensions = targetDems * (Vector2){scaleX, scaleY};
+  }
 }
 
 void AnimatedSpacer::render() {

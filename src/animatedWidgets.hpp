@@ -34,6 +34,7 @@ struct AnimatedRect : Rect {
 
 struct AnimatedSpacer : AnimatedRect {
   float speed;
+  Vector2 targetDems;
   void step(float delta) override;
   void render() override;
   AnimatedSpacer(Spacer, AnimatedWidget::easeType, Direction);
