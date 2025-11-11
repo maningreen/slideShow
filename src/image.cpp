@@ -3,9 +3,9 @@
 #include "include.h"
 #include <string>
 
-ImageWidget::ImageWidget(Image s, Vector2 p) {
+ImageWidget::ImageWidget(Texture s, Vector2 p) {
   position = p;
-  source = LoadTextureFromImage(s);
+  source = s;
   dimensions = {
     .x = (float)source.width,
     .y = (float)source.height

@@ -156,19 +156,20 @@ void CircleSectionLines::render() {
   DrawCircleSector(center, (radius - thickness), RAD2DEG * (centerAngle - offset), RAD2DEG * (centerAngle + offset), 12, BACKGROUND);
 }
 
-Font Text::fonts[0];
+Font Text::fonts[1];
 
 void Text::loadFonts() {
   fonts[0] = LoadFontEx("resources/body.ttf", 128, 0, 250); 
+  // fonts[0] = GetFontDefault();
 }
 
 Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Color c) {
-  dimensions = MeasureTextEx(fonts[y], x.c_str(), s, 2) + (Vector2){0, 30};
   position = p;
   text = x;
   type = y;
   size = s;
   col = c;
+  dimensions = MeasureTextEx(fonts[type], x.c_str(), s, 2) + (Vector2){0, 30};
 }
 
 Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems) {
@@ -177,7 +178,7 @@ Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems) {
   type = y;
   size = s;
   col = WHITE;
-  dimensions = dems;
+  dimensions = MeasureTextEx(fonts[type], text.c_str(), size, 2) + (Vector2){0, 30};
 }
 
 Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems, Color c) {
@@ -186,11 +187,12 @@ Text::Text(std::string x, fontType y, unsigned s, Vector2 p, Vector2 dems, Color
   type = y;
   size = s;
   col = c;
-  dimensions = dems;
+  dimensions = MeasureTextEx(fonts[type], text.c_str(), size, 2) + (Vector2){0, 30};
 }
 
 Text::~Text() {}
 
 void Text::render() {
-  DrawTextEx(fonts[type], text.c_str(), globalPos - dimensions / (Vector2){2, 2}, size, 2, col);
+  Vector2 pos = globalPos - (dimensions / (Vector2){2, 2});
+  DrawTextEx(fonts[type], text.c_str(), pos, size, 2, col);
 }

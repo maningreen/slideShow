@@ -165,13 +165,14 @@ void AnimatedCircleSectionLines::render() {
 }
 
 AnimatedText::AnimatedText(Text x, AnimatedWidget::easeType t) : Text(x) {
-  dimensions = MeasureTextEx(fonts[type], text.c_str(), size, 2) + (Vector2){0, 30};
   animation = AnimatedWidget(t);
   progress = 0;
   speed = 1;
+  dimensions = MeasureTextEx(fonts[type], text.c_str(), size, 2) + (Vector2){0, 30};
 }
 
 void AnimatedText::step(float delta) {
+  dimensions = MeasureTextEx(fonts[type], text.c_str(), size, 2) + (Vector2){0, 30};
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++) {
       entities[i]->globalPos = entities[i]->position + globalPos;
@@ -186,7 +187,7 @@ void AnimatedText::render() {
   unsigned index = floor(scalar * text.length());
   char old = text[index];
   text[index] = '\0';
-  DrawTextEx(fonts[type], text.c_str(), globalPos - dimensions / (Vector2){2, 2}, size, 2, col);
+  DrawTextEx(fonts[type], text.c_str(), globalPos - (dimensions / (Vector2){2, 2}), size, 2, col);
   text[index] = old;
   if(progress >= 1)
     for(int i = 0; i < entities.size(); i++)

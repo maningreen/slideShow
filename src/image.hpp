@@ -13,7 +13,7 @@ struct ImageWidget : Widget {
   float scale;
 
 
-  ImageWidget(Image source, Vector2 p);
+  ImageWidget(Texture source, Vector2 p);
   ImageWidget(std::string source, Vector2 p);
   ImageWidget(char* source, Vector2 p);
   ~ImageWidget();
