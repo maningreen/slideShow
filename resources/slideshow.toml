@@ -283,13 +283,13 @@ background = "#11111B"
       colour = "#F7ECE1"
       contents = "What's Bradburry trying to say?"
 
-        [[slides.widgets.children.children]]
-        type = "animatedCircle"
-        x = 0
-        y = 0
-        radius = 1
-        colour = "#11111B"
-        speed = 0.3
+      [[slides.widgets.children.children]]
+      type = "animatedCircle"
+      x = 0
+      y = 0
+      radius = 1
+      colour = "#11111B"
+      speed = 0.3
 
         [[slides.widgets.children.children.children]]
         type = "animatedRect"
@@ -528,12 +528,12 @@ That way lies meloncholy." (58)
   [[slides.widgets]]
   type = "animatedText"
   contents = """
-  Can you dance faster than the White Clown, 
+  "Can you dance faster than the White Clown, 
   shout louder than 'Mr. Gimmick' 
   and the parlor 'families'? 
   If you can, you'll win your way, Montag. 
   In any event, you're a fool. 
-  People are having fun.
+  People are having fun,"
   (83)
   """
   x = 920
