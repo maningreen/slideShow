@@ -9,7 +9,6 @@
 #include <optional>
 
 namespace toml {
-  SlideShow* parseSlideShow(toml::table);
   Slide* parseSlide(toml::table);
 
   // table **required** to have a "type" field

@@ -387,17 +387,6 @@ std::optional<AnimatedText*> toml::parseAnimatedText(toml::table table) {
   return x;
 }
 
-SlideShow* toml::parseSlideShow(toml::table x) {
-  SlideShow* show = new SlideShow((std::vector<Slide*>){});
-  if(toml::array* y = x["slides"].as_array())
-    y->for_each([&](toml::node& node){
-      if(node.is_table()) show->addSlide(parseSlide(*node.as_table()));
-    });
-  if(std::optional<Color> background = hexToCol(x["background"].value_or(""))) show->background = background.value();
-  else show->background = BLACK;
-  return show;
-}
-
 Box* toml::parseBox(toml::table x) {
   Orientation d = strToOrientation(x["orientation"].value<std::string>().value_or("horizontal"));
   Box* b = new Box(d, {});
@@ -422,7 +411,38 @@ std::optional<ImageWidget*> toml::parseImage(toml::table table) {
   if(!(source && pos))
     return std::nullopt;
 
-  ImageWidget* x = new ImageWidget(source.value(), pos.value());
+  ImageWidget* x = new ImageWidget(LoadTexture(source.value().c_str()), pos.value());
+
+  if(table["cropping"].is_table()) {
+    std::optional<Rectangle> cropped = parseRectangle(*table["cropping"].as_table());
+    if(cropped)
+      x->crop = cropped.value();
+    else x->crop = {0, 0, 0, 0};
+  }
+
+  x->position = pos.value();
+
+  if (std::optional<float> scale = table["scale"].value<float>()) x->scale = scale.value();
+
+  return x;
+}
+
+std::optional<AnimatedImageWidget*> toml::parseAnimatedImage(toml::table table) {
+  Direction dir = strToDir(table["orientation"].value_or("")).value_or(Up);
+  AnimatedWidget::easeType type = strToAnimation(table["direction"].value_or("")).value_or(AnimatedWidget::InOut);
+  
+  std::optional<std::string> source = table["source"].value<std::string>();
+  std::optional<Vector2> pos = parseVector2(table);
+
+  if(!(source && pos))
+    return std::nullopt;
+
+  Texture tex = LoadTexture(source.value().c_str());
+
+  AnimatedImageWidget* x = new AnimatedImageWidget(ImageWidget(tex, pos.value()), type, dir);
+
+  UnloadTexture(x->source);
+  x->source = LoadTexture(source.value().c_str());
 
   if(table["cropping"].is_table()) {
     std::optional<Rectangle> cropped = parseRectangle(*table["cropping"].as_table());
@@ -430,35 +450,13 @@ std::optional<ImageWidget*> toml::parseImage(toml::table table) {
       x->crop = cropped.value();
   }
 
-  x->scale = table["scale"].value_or(1);
-
-  return x;
-}
-
-std::optional<AnimatedImageWidget*> toml::parseAnimatedImage(toml::table table) {
-  std::optional<std::string> sourceM = table["source"].value<std::string>();
-  std::optional<float> xM = table["x"].value<float>();
-  std::optional<float> yM = table["y"].value<float>();
-
-  if(!(sourceM && xM && yM))
-    return std::nullopt;
-
-  Direction dir = strToDir(table["orientation"].value_or("")).value_or(Up);
-  AnimatedWidget::easeType type = strToAnimation(table["direction"].value_or("")).value_or(AnimatedWidget::InOut);
-  AnimatedImageWidget* x = new AnimatedImageWidget(ImageWidget(LoadTexture(sourceM.value().c_str()), {xM.value(), yM.value()}), type, dir);
-
-  UnloadTexture(x->source);
-  x->source = LoadTexture(sourceM.value().c_str());
-
-  x->entities = parseChildenThingy(table);
-
-  if(table["cropping"].is_table())
-    if(std::optional<Rectangle> cropped = parseRectangle(*table["cropping"].as_table()))
-      x->crop = cropped.value();
-
-  if(std::optional<float> scale = table["scale"].value<float>()) x->scale = scale.value();
-
   if(std::optional<float> speed = table["speed"].value<float>()) x->speed = speed.value();
+  else x->speed = 1;
+
+  x->position = pos.value();
+
+  if (std::optional<float> scale = table["scale"].value<float>()) x->scale = scale.value();
+
 
   return x;
 }

@@ -45,7 +45,8 @@ web: $(BUILDDIR)
 		-s TOTAL_MEMORY=134217728 \
 		-s ALLOW_MEMORY_GROWTH=1 \
 		--shell-file ./external/raylib-5.5/web/minshell.html \
-		--preload-file resources
+		--preload-file resources/ \
+		-lGL \
 
 $(ENGINEOUT): $(ENGINEOBJS) # -c makes it not link
 	ar rcs $(ENGINEOUT) $(ENGINEOBJS)

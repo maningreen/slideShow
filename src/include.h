@@ -16,6 +16,8 @@
 
 #define TRANSPARENT (Color){0, 0, 0, 0}
 
+#define DEBUG printf("\n%d, in file %s\n\n", __LINE__, __FILE__);
+
 enum Direction {
   Up,
   Down,

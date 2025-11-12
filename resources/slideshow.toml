@@ -216,6 +216,7 @@ background = "#11111B"
       x = 620
       y = 240
       speed = 0.4
+      scale = 4
 
       [[slides.widgets.children.children]]
       type = "animatedImage"
@@ -430,8 +431,8 @@ That way lies meloncholy." (58)
       type = "animatedImage"
       source = "./resources/instagram.png"
       x = -1000
-      y = -100 
-      scale = 0.1
+      y = -125 
+      scale = 1
       speed = 0.15
   
   [[slides.widgets]]

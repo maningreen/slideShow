@@ -18,7 +18,12 @@ struct Slide : public Entity {
 };
 
 struct SlideShow : Entity {
-  std::vector<Slide*> slides;
+private:
+  // WARNING: THIS METHOD DOES NOT DEINITIALIZE MEMORY
+  void loadSlide();
+public:
+  std::vector<toml::table> slides;
+  Slide* slide;
 
   unsigned currentSlide;
 
@@ -27,14 +32,10 @@ struct SlideShow : Entity {
   void process(float delta) override;
   void render() override;
 
-  void addSlide(Slide*);
-  void addSlide(Slide);
-
   void nextSlide();
   void previousSlide();
 
-  SlideShow(std::vector<Slide> slides);
-  SlideShow(std::vector<Slide*> slides);
+  SlideShow(toml::table slides);
   SlideShow();
   ~SlideShow();
 };

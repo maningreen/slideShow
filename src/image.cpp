@@ -1,6 +1,8 @@
 #include "image.hpp"
 #include "animatedWidgets.hpp"
 #include "include.h"
+#include "widget.hpp"
+#include <iostream>
 #include <string>
 
 ImageWidget::ImageWidget(Texture s, Vector2 p) {
@@ -59,13 +61,13 @@ void ImageWidget::render() {
   DrawTexturePro(source, (Rectangle){
     crop.x,
     crop.y,
-    (dimensions.x - crop.width),
-    (dimensions.y - crop.height),
+    (source.width - crop.width),
+    (source.height - crop.height),
   }, (Rectangle){
-    position.x,
-    position.y,
-    (dimensions.x - crop.width) * scale,
-    (dimensions.y - crop.height) * scale,
+    globalPos.y,
+    globalPos.x,
+    (source.width - crop.width) * scale,
+    (source.height - crop.height) * scale,
   }, Vector2Zero(), 0, WHITE);
 }
 
@@ -123,14 +125,14 @@ void AnimatedImageWidget::render() {
   float scaleX = dir == Right || dir == Left ? animation.ease(progress) : 1;
   float scaleY = dir == Up || dir == Down ? animation.ease(progress) : 1;
   DrawTexturePro(source, (Rectangle){
-    crop.y,
     crop.x,
-    ((float)source.width - crop.width) * scaleX,
-    ((float)source.height - crop.height) * scaleY,
+    crop.y,
+    (source.width - crop.width) * scaleX,
+    (source.height - crop.height) * scaleY,
   }, (Rectangle){
     globalPos.x,
     globalPos.y,
-    ((float)source.width - crop.width) * scaleX * scale,
-    ((float)source.height - crop.height) * scaleY * scale,
+    (source.width - crop.width) * scale * scaleX,
+    (source.height - crop.height) * scale * scaleY,
   }, Vector2Zero(), 0, WHITE);
 }

@@ -12,7 +12,6 @@ struct ImageWidget : Widget {
   Rectangle crop;
   float scale;
 
-
   ImageWidget(Texture source, Vector2 p);
   ImageWidget(std::string source, Vector2 p);
   ImageWidget(char* source, Vector2 p);
