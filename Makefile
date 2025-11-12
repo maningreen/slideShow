@@ -30,7 +30,7 @@ BUILDDIR = build/
 $(OUT): $(BUILDDIR) $(ENGINEOBJS) $(OBJECTS)
 	$(CC) $(ENGINEOBJS) $(OBJECTS) -o $(OUT) $(RAYLIBFLAGS-X86) 
 
-web: $(BUILDDIR)
+web: $(BUILDDIR) 
 	$(WEBCC) \
   	$(SRC) \
 		$(ENGINESRC) \
