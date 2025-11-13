@@ -12,8 +12,8 @@ background = "#11111B"
   centerAngle = 225
   offsetAngle = 45
 
-  x = 45
-  y = 45
+  x = 25
+  y = 25
 
   radius = 40
   thickness = 5
@@ -25,7 +25,7 @@ background = "#11111B"
     type = "animatedRect"
     x = 40
     y = 0
-    width = 1745 
+    width = 1150 
     height = 5
     orientation = "right"
     colour = "#F7ECE1"
@@ -37,7 +37,7 @@ background = "#11111B"
     x = 0
     y = 40
     width = 5
-    height = 905
+    height = 670
     colour = "#F7ECE1"
     easeType = "Out"
     orientation = "down"
@@ -50,7 +50,7 @@ background = "#11111B"
   offsetAngle = 45
 
   x = 0
-  y = 905
+  y = 670
 
   radius = 40
   thickness = 5
@@ -64,8 +64,8 @@ background = "#11111B"
   centerAngle = 45
   offsetAngle = 45
 
-  x = 1790
-  y = 950
+  x = 1175
+  y = 695
 
   radius = 40
   thickness = 5
@@ -80,7 +80,7 @@ background = "#11111B"
     offsetAngle = 45
 
     x = 0
-    y = -905
+    y = -670
 
     radius = 40
     thickness = 5
@@ -90,9 +90,9 @@ background = "#11111B"
   
     [[slides.widgets.children]]
     type = "animatedRect"
-    x = -1705
+    x = -1110
     y = 75
-    width = 1750
+    width = 1150
     height = 5
     colour = "#F7ECE1"
     easeType = "Out"
@@ -102,9 +102,9 @@ background = "#11111B"
     [[slides.widgets.children]]
     type = "animatedRect"
     x = 75 
-    y = -865
+    y = -630
     width = 5
-    height = 905
+    height = 670
     colour = "#F7ECE1"
     easeType = "Out"
     orientation = "up"
@@ -115,8 +115,8 @@ background = "#11111B"
 
   colour = "#F7ECE1"
   size = 100
-  x = 960
-  y = 540
+  x = 640
+  y = 400
   contents = "Farenheit 451"
 
   style = "body"
@@ -126,8 +126,8 @@ background = "#11111B"
 
   colour = "#CAC4CE"
   size = 50
-  x = 960
-  y = 640
+  x = 640
+  y = 540
   contents = "By Gavin D."
 
   style = "body"
@@ -137,19 +137,19 @@ background = "#11111B"
   [[slides.widgets]]
   type = "animatedText"
   contents = "What do you do that makes you happy?"
-  size = 90
+  size = 60
   style = "body"
   speed = 4
   colour = "#F7ECE1"
-  x = 960
-  y = 540
+  x = 640
+  y = 400
 
   [[slides.widgets.children]]
   type = "animatedRect"
   colour = "#725AC1"
-  x = -615
-  y = 20
-  width = 100
+  x = -415
+  y = 10
+  width = 55
   height = 10
   orientation = "right"
 
@@ -213,17 +213,17 @@ background = "#11111B"
       [[slides.widgets.children.children]]
       type = "animatedImage"
       source = "./resources/flame.jpg"
-      x = 620
-      y = 240
-      speed = 0.4
+      x = 413
+      y = 177
+      speed = 0.7
       scale = 4
 
       [[slides.widgets.children.children]]
       type = "animatedImage"
       source = "./resources/StackOfBooks.png"
-      x = 1320
-      y = 580
-      scale = 1
+      x = 980
+      y = 500
+      scale = 0.5
       speed = 0.4
 
 [[slides]]
@@ -233,7 +233,7 @@ background = "#11111B"
   contents = "all of this to say:"
   colour = "#F7ECE1"
   size = 40
-  x = 920
+  x = 640
   y = 200
 
     [[slides.widgets.children]]
@@ -242,19 +242,6 @@ background = "#11111B"
     x = -238
     y = 100
     scale = 1.5
-
-    [[slides.widgets.children]]
-    type = "animatedText"
-    x = 0
-    y = 700
-    size = 40
-    colour = "#F7ECE1"
-    contents = """
-    THIS IS NOT A JOKE GUYS 
-  THE GOVERNMENT IS TRYING TO
-   MAKE THE CITIZENS SHEEPLE
-        WAKE UP SHEEPLE
-    """
 
   [[slides.widgets]]
   type = "animatedCircle"
@@ -277,11 +264,11 @@ background = "#11111B"
 
       [[slides.widgets.children.children]]
       type = "animatedText"
-      x = 920
+      x = 640
       y = 150
-      size = 70
+      size = 50
       colour = "#F7ECE1"
-      contents = "What's Bradburry trying to say?"
+      contents = "What's Bradbury trying to say?"
 
       [[slides.widgets.children.children]]
       type = "animatedCircle"
@@ -293,12 +280,12 @@ background = "#11111B"
 
         [[slides.widgets.children.children.children]]
         type = "animatedRect"
-        x = 192
-        width = 1536
+        orientation = "left"
+        x = 100
+        width = 1080
         y = 100
         height = 100
         colour = "#F7ECE1"
-        orientation = "left"
 
 
 ### THEME STATEMENT
@@ -306,66 +293,66 @@ background = "#11111B"
 
   [[slides.widgets]]
   type = "rect"
-  x = 192
-  width = 1536
+  x = 100
+  width = 1080
   y = 100
   height = 100
   colour = "#F7ECE1"
 
   [[slides.widgets]]
 
-    type = "animatedRect"
-    x = 207
-    width = 1504.8
-    y = 110
-    height = 80
-    colour = "#11111B"
-    orientation = "right"
+  type = "animatedRect"
+  x = 110
+  width = 1060
+  y = 110
+  height = 80
+  colour = "#11111B"
+  orientation = "right"
 
 
-      [[slides.widgets.children]]
-      type = "animatedText"
-      x = 768
-      y = 400
-      size = 70
-      contents = "How does the book support this theme?"
-      colour = "#F7ECE1"
-
-    [[slides.widgets]]
-
-    type = "text"
-    x = 975
-    y = 170
+    [[slides.widgets.children]]
+    type = "animatedText"
+    x = 570
+    y = 400
+    size = 40
+    contents = "How does the book support this theme?"
     colour = "#F7ECE1"
-    size = 80
-    contents = "Without growth one can't be happy."
+
+  [[slides.widgets]]
+
+  type = "text"
+  x = 640
+  y = 170
+  colour = "#F7ECE1"
+  size = 50
+  contents = "Without growth one can't be happy."
 
 ### a bunch of quotes
 [[slides]]
 
   [[slides.widgets]]
   type = "animatedRect"
-  x = 1700
-  y = 100
+  x = 1133
+  y = 74
   width = 10
-  height = 450
+  height = 333
   colour = "#F7ECE1"
   easeType = "In"
 
     [[slides.widgets.children]]
     type = "animatedRect"
     x = 0
-    y = 450
+    y = 333
     width = 10
-    height = 450
+    height = 333
     colour = "#F7ECE1"
     easeType = "Out"
 
     [[slides.widgets.children]]
     type = "animatedRect"
-    x = -1000 
-    y = 450
-    width = 1000
+    x = -666 
+    y = 333
+    width = 666
     height = 10
     colour = "#F7ECE1"
     orientation = "left"
@@ -376,7 +363,7 @@ background = "#11111B"
       x = 0 
       y = 0
       width = 10
-      height = 400
+      height = 296
       colour = "#F7ECE1"
       orientation = "down"
       easeType = "Out"
@@ -394,14 +381,15 @@ background = "#11111B"
   [[slides.widgets]]
   type = "animatedText"
   # p 58 "beatty's rant"
-  size = 30
+  size = 20
   colour = "#F7ECE1"
-  x = 870
-  y = 270
+  x = 500
+  y = 250
   contents = """
 "Give the people contests they win by remembering the words to more 
 popular songs or names of state capitals or how much corn Iowa grew last year. 
-Cram them full of noncombustible data, chock them so damned full of 'facts' they feel stuffed, 
+Cram them full of noncombustible data, chock them so damned full of 
+'facts' they feel stuffed, 
 but absolutely 'brilliant' with information. 
 Then they'll feel they're thinking, 
 they'll get a sense of motion without ever actually moving. 
@@ -419,20 +407,19 @@ That way lies meloncholy." (58)
     of like... a lot of content running quickly
     of which can have "information"
     but not really information that means anything
-    Wow that's some conveniently placed whitespace
     """
     x = 300
-    y = 450
-    size = 30
+    y = 333
+    size = 20
     speed = 0.3
     colour = "#F7ECE1"
 
       [[slides.widgets.children.children]]
       type = "animatedImage"
       source = "./resources/instagram.png"
-      x = -1000
+      x = -666
       y = -125 
-      scale = 1
+      scale = 0.5 
       speed = 0.15
   
   [[slides.widgets]]
@@ -441,14 +428,14 @@ That way lies meloncholy." (58)
   y = 0
   radius = 1
   colour = "#11111B"
-  speed = 0.008
+  speed = 0.05
 
     [[slides.widgets.children]]
     type = "animatedRect"
     x = 0
     y = 0
-    width = 1920
-    height = 1920
+    width = 1280
+    height = 800
     colour = "#11111B"
     speed = 0.4
 
@@ -468,15 +455,17 @@ That way lies meloncholy." (58)
     contents = """
     'I hate a Roman named Status Quo!' he said to me. 
     'Stuff your eyes full of wonder,' he said, 
-    '... See the world. It's more fantastic than any dream made or paid for in factories... 
-    [otherwise you'll] be related to the great sloth which hangs upside down in a tree all day every day, 
+    '... See the world. 
+    It's more fantastic than any dream made or paid for in factories... 
+    [otherwise you'll] be related to the great sloth 
+    which hangs upside down in a tree all day every day, 
     sleeping its life way, to hell with that,' he said, 
     'shake the tree and knock the great sloth down on his ass.'
     (150)
     """
-    size = 30
+    size = 25
     colour = "#F7ECE1"
-    x = 900
+    x = 500
     y = 160
 
     [[slides.widgets.children]]
@@ -522,6 +511,7 @@ That way lies meloncholy." (58)
         orientation = "right"
         source = "./resources/sloth.jpg"
         colour = "#F7ECE1"
+        scale = 0.500
 
 [[slides]]
 
@@ -536,8 +526,8 @@ That way lies meloncholy." (58)
   People are having fun,"
   (83)
   """
-  x = 920
-  y = 540
+  x = 640
+  y = 400
   size = 30
   colour = "#F7ECE1"
 
@@ -552,8 +542,8 @@ That way lies meloncholy." (58)
 
   [[slides.widgets]]
   type = "animatedRect"
-  x = 540
-  y = 400
+  x = 240
+  y = 260
   width = 10
   height = 220
   colour = "#8D86C9"
@@ -572,15 +562,17 @@ That way lies meloncholy." (58)
 
   [[slides.widgets]]
   type = "animatedText"
-  x = 960
-  y = 540
-  size = 25
+  x = 640
+  y = 400
+  size = 20
 
   speed = 0.3
   contents = """
   This slideshow was made in a custom engine.
-  If you want to see the source it's visible at https://github.com/maningreen/slideShow
-  If you wish to clone the source, you can with the command `git clone https://github.com/maningreen/slideShow.git`
+  If you want to see the source it's visible at 
+  https://github.com/maningreen/slideShow
+  If you wish to clone the source, you can with the command 
+  `git clone https://github.com/maningreen/slideShow.git`
   This software is licensed under the MIT license, as such you can use this in a closed source project.
   sources for images can be found at ./resources/sources.md
   All the software used to create this are free and open source.
@@ -593,8 +585,8 @@ That way lies meloncholy." (58)
   [[slides.widgets]]
   type = "animatedText"
   x = 500
-  y = 1000
-  size = 25
+  y = 700
+  size = 20
 
   contents = """
   No "generative AI" wrote any of the content in this presentation

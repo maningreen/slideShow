@@ -9,7 +9,7 @@ void preRendering(Entity* root);
 void postRendering(Entity* root);
 
 int main() {
-  InitWindow(1920, 1080, "cool as heck website :sunglasses:");
+  InitWindow(Root::windowDimensions.x, Root::windowDimensions.y, "cool as heck website :sunglasses:");
   SetTargetFPS(60);
 
   Root* root = nullptr;

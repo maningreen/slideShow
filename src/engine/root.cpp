@@ -2,7 +2,7 @@
 #include "entity.hpp"
 #include <string>
 
-const Vector2 Root::windowDimensions = {1920, 1080};
+const Vector2 Root::windowDimensions = {1280, 800};
 const std::string Root::windowName = "cool presentation thing!";
 
 Root::Root() : Entity("root", nullptr) {}
@@ -26,8 +26,6 @@ void Root::render() {
 
 void Root::postRender() {
   EndTextureMode();
-
-  // DrawTexturePro(renderTexture.texture, (Rectangle){0, 0, windowDimensions.x, -windowDimensions.y}, (Rectangle){0, 0, (float)GetScreenWidth(), -(float)GetScreenHeight()}, {0, 0}, 0, WHITE);
 
   EndDrawing();
 }
