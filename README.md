@@ -1,7 +1,11 @@
-# evil slideshow widget thingy >:D
+# Slideshow engine
 
-This is a slideshow engine i whipped up in a weekend.
-Are there docs? Not yet. Sorry, I'll do that in a second, after the assignment is due
+This is a custom slideshow engine, written in C++ using raylib.
 
-#### warning
-web build only works for chromium based browsers
+This was made for an English assignment and was created in a weekend.<br>
+As such, I've yet to create documentation, read `resources/slideshow.toml` to get a *general* idea on syntax.
+
+Also, if you feel like my writing is poor, it is, and I apologize and humbly request you ignore it.
+
+## WARNING
+The web build only works on chromium browsers
